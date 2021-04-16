@@ -2,7 +2,7 @@
 
 ### Kelompok IT-04
 * Maulida Meirisdiana 05311940000005
-* Gerry Putra Fersnando 
+* Gerry Putra
 * Dava Aditya Jauhar
 
 ## Pembahasan Soal
