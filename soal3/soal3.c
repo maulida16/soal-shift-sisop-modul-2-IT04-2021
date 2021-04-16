@@ -93,7 +93,6 @@ int main(int argc, char **argv){
             pid_t child_id;
             child_id = fork();
 
-            //nggak tau buat apa
             int status;
 
             //exit klo gagal
@@ -118,15 +117,13 @@ int main(int argc, char **argv){
                         if (fork() == 0){
                             //ganti pwd ke folde baru tadi
                             chdir(folder_name);
-                            //bikin var buat timer
+				
                             time_t file_timer;
-                            //iki lapo mbuh
                             struct tm* file_tm_info;
 
                             file_timer = time(NULL);
                             file_tm_info = localtime(&file_timer);
 
-                            //t = waktu epoch
                             int t = (int)time(NULL);
                             t = (t % 1000) + 100;
 
