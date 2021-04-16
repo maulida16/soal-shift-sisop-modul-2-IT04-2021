@@ -31,7 +31,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
 * Tidak boleh pake cron !!!
 * Menggunakan fork dan exec.
 
-## Penyelesaian 
+### Penyelesaian 
 
 ### Soal 2
 
@@ -55,7 +55,7 @@ Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang ber
 * Tidak boleh menggunakan fungsi system(), mkdir(), dan rename().
 * Menggunakan fork dan exec.
 
-## Penyelesaian
+### Penyelesaian
 
 
 ## Soal 3
@@ -73,7 +73,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
 * Program utama merupakan SEBUAH PROGRAM C
 * Wajib memuat algoritma Caesar Cipher pada program utama yang dibuat
 
-## Penyelesaian
+### Penyelesaian
 
 
 
