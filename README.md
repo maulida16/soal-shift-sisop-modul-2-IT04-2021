@@ -33,6 +33,58 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
 
 ### Penyelesaian 
 
+* Source code lengkap ada di [Soal 1(https://github.com/maulida16/soal-shift-sisop-modul-2-IT04-2021/blob/main/soal3/soal3.c)]
+
+    #include <sys/stat.h>
+    #include <sys/types.h>
+    #include <sys/wait.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <fcntl.h>
+    #include <errno.h>
+    #include <unistd.h>
+    #include <syslog.h>
+    #include <string.h>
+    #include <time.h>
+    
+* Diatas merupakan library yang akan digunakan di kode program ini.
+
+        char sandi[100];
+
+        void itik(char message[100], int key){
+
+        char encrypted[100], symbol;
+
+        for(int i = 0; message[i] != '\0'; ++i){
+        symbol = message[i];
+
+        if(symbol >= 'a' && symbol <= 'z'){
+            symbol = symbol + key;
+
+            if(symbol > 'z'){
+                symbol = symbol - 'z' + 'a' - 1;
+            }
+
+            encrypted[i] = symbol;
+        }
+        else if(symbol >= 'A' && symbol <= 'Z'){
+            symbol = symbol + key;
+
+            if(symbol > 'Z'){
+                symbol = symbol - 'Z' + 'A' - 1;
+            }
+
+            encrypted[i] = symbol;
+        }
+      }
+      strcpy(sandi, encrypted);
+      printf("%s", sandi);
+    }
+
+* Di awal program kami membuat fungsi bernama itik. Fungsi itik ini merupakan program caesar chiper untuk mengenkripsi keterangan yang akan dikeluarkan saat program berhasil dijalankan. Kami menggunakan perulangan yang akang mengiterasi dua parameter yang pertama adalah pesannya, dan yang kedua adalah jumlah kunci pergeserannya. 
+*   symbol = message[i];
+
+
 ### Soal 2
 
 Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang berisi banyak sekali foto peliharaan dan Ia diperintahkan untuk mengkategorikan foto-foto peliharaan tersebut. Loba merasa kesusahan melakukan pekerjaanya secara manual, apalagi ada kemungkinan ia akan diperintahkan untuk melakukan hal yang sama. Kamu adalah teman baik Loba dan Ia meminta bantuanmu untuk membantu pekerjaannya.
