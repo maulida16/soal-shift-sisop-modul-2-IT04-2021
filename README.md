@@ -33,7 +33,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
 
 ### Penyelesaian 
 
-* Source code lengkap ada di [Soal 1]("https://github.com/maulida16/soal-shift-sisop-modul-2-IT04-2021/blob/main/soal3/soal3.c")
+* Source code lengkap ada di [Soal 1](https://github.com/maulida16/soal-shift-sisop-modul-2-IT04-2021/blob/main/soal3/soal3.c)
 
         #include <sys/stat.h>
         #include <sys/types.h>
