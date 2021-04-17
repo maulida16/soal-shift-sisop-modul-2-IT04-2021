@@ -129,6 +129,35 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
 * Pergeseran kunci berlaku baik untuk huruf kecil maupun huruf besar.
 * **symbol = message[i];** digunakan sebagai variabel sementara untuk menampung huruf-huruf yang sudah ditambah oleh kuncinya. Setelah pesan dalam variabel **symbol** terenskripsi, semua isinya akan dipindah ke variabel array **encypted**. Setelah itu akan di tampilkan hasil enkripsinya.
 
+        void generateKiller(char source[]){
+            FILE *target;
+            //buka/jalankan file killer.sh
+            target = fopen("killer.sh", "w");
+            int status;
+            
+ * Selanjutnya kami membuat fungsi killer untuk mengakhiri program yang dijalankan. Fungsi killer ini akan menyimpan alamat dari killer.sh dimana kami akan memanggilnya menggunakan fungsi **fopen**
+                
+                //mode 1 (-z)
+            if (strcmp(source, "-z") == 0)
+                fprintf(target, "#!/bin/bash\npkill -9 soal3\nrm killer.sh");
+                //mode 2 (-x)
+            if (strcmp(source, "-x") == 0)
+                fprintf(target, "#!/bin/bash\npkill soal3\nrm killer.sh");
+                
+* Di fungsi killer inilah kami memastikan bahwa kedua mode kill dapat dijalankan. Kami menggunakan fungsi strcmp untuk memastikan bahwa string yang dimasukkan adalah benar. Alasan kami menggunakan pkill dibanding dengan kill adalah karena saat kami mencoba trial & error nya, pkill bisa mematikan semua proses dengan nama yang sama, sedangkan kill hanya bisa mematikan proses dengan PID yang disebutkan. 
+
+            //kalau di child
+            if(fork() == 0){
+              //set permission buat file killer biar 
+              char *argv[] = {"chmod", "u+x", "killer.sh", NULL};
+              execv("/bin/chmod", argv);
+            }
+            //tutup program/file killeh.sh yang tadi dijalanin
+            fclose(target);
+        }
+
+* 
+        
         void generate_statustxt(char folder_local[]){
 
             FILE *status_txt;
@@ -149,11 +178,16 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
         }
 * Berikutnya kami membuat program untuk membuat sebuah file bernama **status.txt**.  Pada awalan program kami ................ Selanjutnya, pada file status
 
+
+* Proses selanjutnya adalah fungsi main dimana kami menggunakan fungsi template daemon dari modul yang telah diberikan.
+
         int main(int argc, char **argv){
             if(argc != 2){
                 puts("argument is not valid");
                 exit(EXIT_FAILURE);
             }
+
+* Program main kami akan membutuhkan dua parameter untuk dijalankan, 
 
             generateKiller(argv[1]);
 
@@ -179,24 +213,14 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
 
             time_t timer;
             struct tm* tm_info;
+* **time_t** adalah sebuah fungsi yang akan mengembalikan waktu saat ini.
+* **tm_info** adalah sebuah pointer fungsi yang akan mengambil value dari timer.
 
           //while untuk membuat folder dan zip
                 while (1) {
 
-* Selanjutnya kami menggunakan template daemon yang sudah disediakan pada modul 2 untuk menjalankan kode program kami.  
 
-        time_t timer;
-        struct tm* tm_info;
 
-* **time_t** adalah sebuah fungsi yang akan mengembalikan waktu saat ini.
-* **tm_info** adalah sebuah pointer fungsi yang akan mengambil value dari timer.
 
-  
-       int main(int argc, char **argv){
-                if(argc != 2){
-                    puts("argument is not valid");
-                    exit(EXIT_FAILURE);
-                }
-                
-* Pada awalan main kami memberikan argumen yang membatasi penggunaan jumlah parameter yang digunakan untuk menjalankan program. 
+
 
