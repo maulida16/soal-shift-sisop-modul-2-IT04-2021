@@ -146,7 +146,6 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
 * Fungsi fprintf digunakan untuk menulis string ke dalam file target yaitu **killer.sh**
 * Di fungsi **generateKiller** inilah kami memastikan bahwa kedua mode kill dapat dijalankan. Kami menggunakan fungsi strcmp untuk memastikan bahwa string yang dimasukkan adalah benar. Alasan kami menggunakan pkill dibanding dengan kill adalah karena pada saat kami mencoba trial & error nya, pkill bisa mematikan semua proses dengan nama yang sama, sedangkan kill hanya bisa mematikan proses dengan PID yang disebutkan. 
 
-            //kalau di child
             if(fork() == 0){
               //set permission buat file killer biar 
               char *argv[] = {"chmod", "u+x", "killer.sh", NULL};
@@ -154,7 +153,8 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             }
             fclose(target);
         }
-* Jika ternyata killer ini berjalan di **Child Proses**, maka akan diganti modenya untuk menambahkan hak eksekusi ke user dengan "u+x". Jika fungsi killer sudah berjalan dengan baik, maka akan dihentikan menggunakan fungsi **fclose** agar tidak membebani komputer dengan proses background yang terus-terusan berjalan.
+        
+* Ketika dijalankan dengan mode kedua yang menggunakan parameter "-x", program akan berjalan di background sehingga untuk mengakses killer.sh perlu diganti modenya dengan menambahkan hak eksekusi ke user menggunakan "chmod", "u+x". Jika fungsi killer sudah berjalan dengan baik, maka akan dihentikan menggunakan fungsi **fclose**.
 
         void generate_statustxt(char folder_local[]){
 
