@@ -10,6 +10,38 @@
 #include <string.h>
 #include <time.h>
 
+char sandi[100];
+
+void itik(char message[100], int key){
+   
+    char encrypted[100], symbol;
+
+    for(int i = 0; message[i] != '\0'; ++i){
+    symbol = message[i];
+
+    if(symbol >= 'a' && symbol <= 'z'){
+        symbol = symbol + key;
+
+        if(symbol > 'z'){
+            symbol = symbol - 'z' + 'a' - 1;
+        }
+
+        encrypted[i] = symbol;
+    }
+    else if(symbol >= 'A' && symbol <= 'Z'){
+        symbol = symbol + key;
+
+        if(symbol > 'Z'){
+            symbol = symbol - 'Z' + 'A' - 1;
+        }
+
+        encrypted[i] = symbol;
+    }
+  }
+  strcpy(sandi, encrypted);
+  printf("%s", sandi);
+}
+
 void generateKiller(char source[]){
     FILE *target;
   	//buka/jalankan file killer.sh
@@ -36,49 +68,55 @@ void generateKiller(char source[]){
 
 void generate_statustxt(char folder_local[]){
 
-  FILE *status_txt;
-  char statuxt[50], status_name[100] = "/status.txt";
-  sprintf(statuxt, "%s%s", folder_local, status_name);
-  //buka/jalankan file killer.sh
-  status_txt = fopen(statuxt, "w");
-  //decrypt();
-  fprintf(status_txt, "Download success!");
-  //set nama file zip
-  fclose(status_txt);
+    FILE *status_txt;
+
+    char statuxt[50], status_name[100] = "/status.txt";
+    sprintf(statuxt, "%s%s", folder_local, status_name);
+
+    //buka/jalankan file killer.sh
+    status_txt = fopen(statuxt, "w");
+
+    char puyuh[100] = "Download Success";
+    itik(puyuh, 5);
+
+    fprintf(status_txt, "%s", sandi);
+
+    //set nama file zip
+    fclose(status_txt);
 }
 
 //argc??? argv???
 int main(int argc, char **argv){
   //kalau
-  if(argc != 2){
-      puts("argument is not valid");
-      exit(EXIT_FAILURE);
-  }
+    if(argc != 2){
+        puts("argument is not valid");
+        exit(EXIT_FAILURE);
+    }
 
-  generateKiller(argv[1]);
+    generateKiller(argv[1]);
 
-  pid_t pid, sid;
+    pid_t pid, sid;
 
-  pid = fork();
+    pid = fork();
 
-  if (pid < 0)
-      exit(EXIT_FAILURE);
+    if (pid < 0)
+        exit(EXIT_FAILURE);
 
-  if (pid > 0)
-      exit(EXIT_SUCCESS);
+    if (pid > 0)
+        exit(EXIT_SUCCESS);
 
-  umask(0);
+    umask(0);
 
-  sid = setsid();
-  if (sid < 0) 
-      exit(EXIT_FAILURE);
+    sid = setsid();
+    if (sid < 0) 
+        exit(EXIT_FAILURE);
 
-  close(STDIN_FILENO);
-  close(STDOUT_FILENO);
-  close(STDERR_FILENO);
+    close(STDIN_FILENO);
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
 
-  time_t timer;
-  struct tm* tm_info;
+    time_t timer;
+    struct tm* tm_info;
 
   //while untuk membuat folder dan zip
         while (1) {
@@ -93,6 +131,7 @@ int main(int argc, char **argv){
             pid_t child_id;
             child_id = fork();
 
+            //nggak tau buat apa
             int status;
 
             //exit klo gagal
@@ -117,13 +156,15 @@ int main(int argc, char **argv){
                         if (fork() == 0){
                             //ganti pwd ke folde baru tadi
                             chdir(folder_name);
-				
+                            //bikin var buat timer
                             time_t file_timer;
+                            //iki lapo mbuh
                             struct tm* file_tm_info;
 
                             file_timer = time(NULL);
                             file_tm_info = localtime(&file_timer);
 
+                            //t = waktu epoch
                             int t = (int)time(NULL);
                             t = (t % 1000) + 100;
 
