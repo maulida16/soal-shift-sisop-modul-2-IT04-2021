@@ -91,7 +91,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
         #include <string.h>
         #include <time.h>
     
-* Diatas merupakan library yang akan digunakan di kode program ini.
+* Diatas merupakan library yang akan digunakan di kode program soal 3 ini.
 
         char sandi[100];
 
@@ -123,10 +123,80 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
       }
       strcpy(sandi, encrypted);
       printf("%s", sandi);
-    }
+      }
 
 * Di awal program kami membuat fungsi bernama itik. Fungsi itik ini merupakan program caesar chiper untuk mengenkripsi keterangan yang akan dikeluarkan saat program berhasil dijalankan. Kami menggunakan perulangan yang akang mengiterasi dua parameter yang pertama adalah pesannya, dan yang kedua adalah jumlah kunci pergeserannya. 
 * Pergeseran kunci berlaku baik untuk huruf kecil maupun huruf besar.
-* **symbol = message[i];** digunakan sebagai variabel sementara untuk menampung huruf-huruf yang sudah ditambah oleh kuncinya. Setelah pesan dalam variabel <em>symbol</em> terenskripsi, semua isinya akan dipindah ke variabel array <em>encypted<em>. Setelah itu akan di tampilkan hasil enkripsinya.
+* **symbol = message[i];** digunakan sebagai variabel sementara untuk menampung huruf-huruf yang sudah ditambah oleh kuncinya. Setelah pesan dalam variabel **symbol** terenskripsi, semua isinya akan dipindah ke variabel array **encypted**. Setelah itu akan di tampilkan hasil enkripsinya.
 
+        void generate_statustxt(char folder_local[]){
+
+            FILE *status_txt;
+
+            char statuxt[50], status_name[100] = "/status.txt";
+            sprintf(statuxt, "%s%s", folder_local, status_name);
+
+            //buka/jalankan file killer.sh
+            status_txt = fopen(statuxt, "w");
+
+            char puyuh[100] = "Download Success";
+            itik(puyuh, 5);
+
+            fprintf(status_txt, "%s", sandi);
+
+            //set nama file zip
+            fclose(status_txt);
+        }
+* Berikutnya kami membuat program untuk membuat sebuah file bernama **status.txt**.  Pada awalan program kami ................ Selanjutnya, pada file status
+
+        int main(int argc, char **argv){
+            if(argc != 2){
+                puts("argument is not valid");
+                exit(EXIT_FAILURE);
+            }
+
+            generateKiller(argv[1]);
+
+            pid_t pid, sid;
+
+            pid = fork();
+
+            if (pid < 0)
+                exit(EXIT_FAILURE);
+
+            if (pid > 0)
+                exit(EXIT_SUCCESS);
+
+            umask(0);
+
+            sid = setsid();
+            if (sid < 0) 
+                exit(EXIT_FAILURE);
+
+            close(STDIN_FILENO);
+            close(STDOUT_FILENO);
+            close(STDERR_FILENO);
+
+            time_t timer;
+            struct tm* tm_info;
+
+          //while untuk membuat folder dan zip
+                while (1) {
+
+* Selanjutnya kami menggunakan template daemon yang sudah disediakan pada modul 2 untuk menjalankan kode program kami.  
+
+        time_t timer;
+        struct tm* tm_info;
+
+* **time_t** adalah sebuah fungsi yang akan mengembalikan waktu saat ini.
+* **tm_info** adalah sebuah pointer fungsi yang akan mengambil value dari timer.
+
+  
+       int main(int argc, char **argv){
+                if(argc != 2){
+                    puts("argument is not valid");
+                    exit(EXIT_FAILURE);
+                }
+                
+* Pada awalan main kami memberikan argumen yang membatasi penggunaan jumlah parameter yang digunakan untuk menjalankan program. 
 
