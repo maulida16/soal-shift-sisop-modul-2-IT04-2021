@@ -76,7 +76,6 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
 
 ### Penyelesaian
 
-
 * Source code lengkap ada di [Soal 3](https://github.com/maulida16/soal-shift-sisop-modul-2-IT04-2021/blob/main/soal3/soal3.c)
 
         #include <sys/stat.h>
@@ -125,7 +124,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
       printf("%s", sandi);
       }
 
-* Di awal program kami membuat fungsi bernama itik. Fungsi itik ini merupakan program caesar chiper untuk mengenkripsi keterangan yang akan dikeluarkan saat program berhasil dijalankan. Kami menggunakan perulangan yang akang mengiterasi dua parameter yang pertama adalah pesannya, dan yang kedua adalah jumlah kunci pergeserannya. 
+* Di awal program kami membuat fungsi bernama itik. Fungsi itik ini merupakan program caesar chiper untuk mengenkripsi keterangan yang akan dikeluarkan saat program berhasil dijalankan. Kami menggunakan perulangan yang akan mengiterasi dua parameter. Yang pertama adalah pesannya, dan yang kedua adalah jumlah kunci pergeserannya. 
 * Pergeseran kunci berlaku baik untuk huruf kecil maupun huruf besar.
 * **symbol = message[i];** digunakan sebagai variabel sementara untuk menampung huruf-huruf yang sudah ditambah oleh kuncinya. Setelah pesan dalam variabel **symbol** terenskripsi, semua isinya akan dipindah ke variabel array **encypted**. Setelah itu akan di tampilkan hasil enkripsinya.
 
@@ -135,7 +134,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             target = fopen("killer.sh", "w");
             int status;
             
- * Selanjutnya kami membuat fungsi killer untuk mengakhiri program yang dijalankan. Fungsi killer ini akan menyimpan alamat dari killer.sh dimana kami akan memanggilnya menggunakan fungsi **fopen**
+ * Selanjutnya kami membuat fungsi killer untuk mengakhiri program yang dijalankan. Fungsi killer ini akan menyimpan alamat dari killer.sh dimana kami akan memanggilnya menggunakan fungsi **fopen** dan menulis string seperti kode di bawah menggunakan fungsi **fprintf**.
                 
                 //mode 1 (-z)
             if (strcmp(source, "-z") == 0)
@@ -144,7 +143,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             if (strcmp(source, "-x") == 0)
                 fprintf(target, "#!/bin/bash\npkill soal3\nrm killer.sh");
                 
-* Di fungsi killer inilah kami memastikan bahwa kedua mode kill dapat dijalankan. Kami menggunakan fungsi strcmp untuk memastikan bahwa string yang dimasukkan adalah benar. Alasan kami menggunakan pkill dibanding dengan kill adalah karena saat kami mencoba trial & error nya, pkill bisa mematikan semua proses dengan nama yang sama, sedangkan kill hanya bisa mematikan proses dengan PID yang disebutkan. 
+* Di fungsi killer inilah kami memastikan bahwa kedua mode kill dapat dijalankan. Kami menggunakan fungsi strcmp untuk memastikan bahwa string yang dimasukkan adalah benar. Alasan kami menggunakan pkill dibanding dengan kill adalah karena pada saat kami mencoba trial & error nya, pkill bisa mematikan semua proses dengan nama yang sama, sedangkan kill hanya bisa mematikan proses dengan PID yang disebutkan. 
 
             //kalau di child
             if(fork() == 0){
@@ -178,8 +177,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
         }
 * Berikutnya kami membuat program untuk membuat sebuah file bernama **status.txt**.  Pada awalan program kami ................ Selanjutnya, pada file status
 
-
-* Proses selanjutnya adalah fungsi main dimana kami menggunakan fungsi template daemon dari modul yang telah diberikan.
+* Proses selanjutnya adalah fungsi main dimana kami menggunakan fungsi template **Daemon Proses** dari modul yang telah diberikan.
 
         int main(int argc, char **argv){
             if(argc != 2){
@@ -187,7 +185,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                 exit(EXIT_FAILURE);
             }
 
-* Program main kami akan membutuhkan dua parameter untuk dijalankan, 
+* Program main kami akan membutuhkan argv dan argc untuk mengetahui berapa banyak dan apa saja parameter yang digunakan untuk mengeksekusi program. Jika jumlah parameter yang diberikan tidak sama dengan 2, maka program tidak akan berjalan.
 
             generateKiller(argv[1]);
 
@@ -213,8 +211,9 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
 
             time_t timer;
             struct tm* tm_info;
+            
 * **time_t** adalah sebuah fungsi yang akan mengembalikan waktu saat ini.
-* **tm_info** adalah sebuah pointer fungsi yang akan mengambil value dari timer.
+* Kami membuat fungsi mennggunakan <em>time structure</em> yang diberi nama **tm_info**. Fungsi ini berfungsi sebagai sebuah pointer fungsi yang akan mengambil value dari timer.
 
           //while untuk membuat folder dan zip
                 while (1) {
