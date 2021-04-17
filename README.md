@@ -124,9 +124,9 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
       printf("%s", sandi);
       }
 
-* Di awal program kami membuat fungsi bernama itik. Fungsi itik ini merupakan program caesar chiper untuk mengenkripsi keterangan yang akan dikeluarkan saat program berhasil dijalankan. Kami menggunakan perulangan yang akan mengiterasi dua parameter. Yang pertama adalah pesannya, dan yang kedua adalah jumlah kunci pergeserannya. 
+* Di awal program kami membuat fungsi bernama itik. Fungsi itik ini merupakan program caesar chiper untuk mengenkripsi keterangan yang akan dikeluarkan saat program berhasil dijalankan. Kami menggunakan perulangan yang akan mengiterasi huruf pada **message[i]** lalu menambahkannya dengan key.
 * Pergeseran kunci berlaku baik untuk huruf kecil maupun huruf besar.
-* **symbol = message[i];** digunakan sebagai variabel sementara untuk menampung huruf-huruf yang sudah ditambah oleh kuncinya. Setelah pesan dalam variabel **symbol** terenskripsi, semua isinya akan dipindah ke variabel array **encypted**. Setelah itu akan di tampilkan hasil enkripsinya.
+* **symbol = message[i];** digunakan sebagai variabel sementara untuk menampung huruf-huruf yang sudah ditambah oleh key-nya. Setelah pesan dalam variabel **symbol** terenskripsi, semua isinya akan dipindah ke variabel array **encrypted**. Setelah itu akan di tampilkan hasil enkripsinya menggunakan fungsi **printf**.
 
         void generateKiller(char source[]){
             FILE *target;
@@ -134,7 +134,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             target = fopen("killer.sh", "w");
             int status;
             
- * Selanjutnya kami membuat fungsi killer untuk mengakhiri program yang dijalankan. Fungsi killer ini akan menyimpan alamat dari killer.sh dimana kami akan memanggilnya menggunakan fungsi **fopen** dan menulis string seperti kode di bawah menggunakan fungsi **fprintf**.
+ * Selanjutnya kami membuat fungsi killer untuk mengakhiri program yang dijalankan. Fungsi killer ini akan menyimpan alamat dari **killer.sh** dimana kami akan memanggilnya menggunakan fungsi **fopen** dengan mode "w" yang digunakan untuk membuka file untuk ditulis. 
                 
                 //mode 1 (-z)
             if (strcmp(source, "-z") == 0)
@@ -142,8 +142,9 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                 //mode 2 (-x)
             if (strcmp(source, "-x") == 0)
                 fprintf(target, "#!/bin/bash\npkill soal3\nrm killer.sh");
-                
-* Di fungsi killer inilah kami memastikan bahwa kedua mode kill dapat dijalankan. Kami menggunakan fungsi strcmp untuk memastikan bahwa string yang dimasukkan adalah benar. Alasan kami menggunakan pkill dibanding dengan kill adalah karena pada saat kami mencoba trial & error nya, pkill bisa mematikan semua proses dengan nama yang sama, sedangkan kill hanya bisa mematikan proses dengan PID yang disebutkan. 
+
+* Fungsi fprintf digunakan untuk menulis string ke dalam file target yaitu **killer.sh**
+* Di fungsi **generateKiller** inilah kami memastikan bahwa kedua mode kill dapat dijalankan. Kami menggunakan fungsi strcmp untuk memastikan bahwa string yang dimasukkan adalah benar. Alasan kami menggunakan pkill dibanding dengan kill adalah karena pada saat kami mencoba trial & error nya, pkill bisa mematikan semua proses dengan nama yang sama, sedangkan kill hanya bisa mematikan proses dengan PID yang disebutkan. 
 
             //kalau di child
             if(fork() == 0){
@@ -151,12 +152,10 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
               char *argv[] = {"chmod", "u+x", "killer.sh", NULL};
               execv("/bin/chmod", argv);
             }
-            //tutup program/file killeh.sh yang tadi dijalanin
             fclose(target);
         }
+* Jika ternyata killer ini berjalan di **Child Proses**, maka akan diganti modenya untuk menambahkan hak eksekusi ke user dengan "u+x". Jika fungsi killer sudah berjalan dengan baik, maka akan dihentikan menggunakan fungsi **fclose** agar tidak membebani komputer dengan proses background yang terus-terusan berjalan.
 
-* 
-        
         void generate_statustxt(char folder_local[]){
 
             FILE *status_txt;
