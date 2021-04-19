@@ -221,14 +221,20 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
 
                     timer = time(NULL);
                     tm_info = localtime(&timer);
-* Di awal perulangan, timer diset dengan NULL terlebih dahulu, 
+                    
+* Di awal perulangan, timer diset dengan NULL terlebih dahulu, lalu di tm_info akan diisi waktu oleh jadwal kalender saat itu juga.
+                    
                     char folder_name[100];
                     //formatnya beda, jangan luapa diganti
                     strftime(folder_name, 100, "%Y-%m-%d_%H:%M:%S", tm_info);
+                    
+* Di sini kami membuat file yang namanya berdasarkan waktu saat ini, dan waktunya diambil dari **tm_info**
 
                     //bikin var pid buat child, jalanin fork()
                     pid_t child_id;
                     child_id = fork();
+                    
+* Selanjutnya kami membuat variabel untuk menjalankan fork
 
                     //nggak tau buat apa
                     int status;
