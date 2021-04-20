@@ -143,7 +143,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             if (strcmp(source, "-x") == 0)
                 fprintf(target, "#!/bin/bash\npkill soal3\nrm killer.sh");
 
-* Fungsi fprintf digunakan untuk menulis string ke dalam file target yaitu **killer.sh**
+* Fungsi fprintf digunakan untuk menulis string ke dalam file target yaitu **killer.sh** yang merupakan program bash.
 * Di fungsi **generateKiller** inilah kami memastikan bahwa kedua mode kill dapat dijalankan. Kami menggunakan fungsi strcmp untuk memastikan bahwa string yang dimasukkan adalah benar. Alasan kami menggunakan pkill dibanding dengan kill adalah karena pada saat kami mencoba trial & error nya, pkill bisa mematikan semua proses dengan nama yang sama, sedangkan kill hanya bisa mematikan proses dengan PID yang disebutkan. 
 
             if(fork() == 0){
@@ -174,7 +174,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             //set nama file zip
             fclose(status_txt);
         }
-* Berikutnya kami membuat program untuk membuat sebuah file bernama **status.txt**.  Pada awalan program kami ................ Selanjutnya, pada file status
+* Berikutnya kami membuat program untuk membuat sebuah file bernama **status.txt**. File inilah yang akan menyimpan string "Download Success" yang kemudian dienkripsi menggnakan fungsi **itik**. 
 
 * Proses selanjutnya adalah fungsi main dimana kami menggunakan fungsi template **Daemon Proses** dari modul yang telah diberikan.
 
@@ -228,23 +228,23 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                     //formatnya beda, jangan luapa diganti
                     strftime(folder_name, 100, "%Y-%m-%d_%H:%M:%S", tm_info);
                     
-* Di sini kami membuat file yang namanya berdasarkan waktu saat ini, dan waktunya diambil dari **tm_info**
+* Di sini kami membuat folder yang namanya berdasarkan waktu saat ini, dan waktunya diambil dari **tm_info**
 
                     //bikin var pid buat child, jalanin fork()
                     pid_t child_id;
                     child_id = fork();
                     
-* Selanjutnya kami membuat variabel untuk menjalankan fork
+* Selanjutnya kami membuat variabel untuk menjalankan fork.
 
                     int status;
                     
-* Di sini kami membuat deklarasi untuk exit function yaitu dengan **int status**. Ini bertujuan untuk menutup semua proses yang berjalan dan setiap child proses yang mendapat nilai 1, program akan dijalankan dan parent process akan memanggil sinyal SIGCHLD.
+* Di sini kami membuat deklarasi untuk exit function yaitu dengan **int status**. "status" bertujuan untuk menutup semua proses yang berjalan dan setiap child proses yang mendapat nilai 1, program akan dijalankan dan parent process akan memanggil sinyal SIGCHLD.
 
                     //exit klo gagal
                     if (child_id < 0) 
                     exit(EXIT_FAILURE);
                     
-* Selanjutnya dibuat kondisi jika spawaning proses gagal dijalankan, atau fork mengembalikan nilai negatif, maka program akan terhenti.
+* Selanjutnya dibuat kondisi jika spawning proses gagal dijalankan, atau fork mengembalikan nilai negatif, maka program akan terhenti.
 
                     //klo berhasil bikin child
                     if (child_id == 0){ 
@@ -275,14 +275,20 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                                     struct tm* file_tm_info;
                                     file_timer = time(NULL);
                                     file_tm_info = localtime(&file_timer);
-
+                                    
+* Kami menggunakan library **time.h** yang berfungsi sebagai penyimpanan waktu download file.
+                                  
                                     //t = waktu epoch
                                     int t = (int)time(NULL);
                                     t = (t % 1000) + 100;
+                                    
+* Deklarasi variabel ini digunakan untuk menyimpan ukuran dari gambar yang akan di download dimana **t** sendiri diambil dari detik waktu Epoch UNIX.                               
 
                                     char url[100];
                                     //url buat donwload gambar persegi txt
                                     sprintf(url, "https://picsum.photos/%d", t);
+                                    
+* Selanjutnya kami mendeklarasikan variabel url untuk menyimpan url dari website yang digunakan untuk mendownload gambar. Kami memasukkan url tersebut ke file url menggunakan fungsi **sprintf**.
 
                                     char file_name[100];
                                     //set nama filenya
@@ -291,10 +297,13 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                                     char *argv[] = {"wget", url, "-qO", file_name, NULL};
                                     execv("/usr/bin/wget", argv);
                                 }
+* Setelah itu kami membuat variabel untuk menyimpan nama file yang berisi waktu lokal yang didapatkan dari file_tm_info. Lalu mendownload filenya menggunakan parameter **wget** dari variabel url tadi dan dieksekusi menggunakan **execv**.
 
                             //loop downloadnya dijalanin tiap 5 detik
                             sleep(5);
                             }
+                            
+* Ketika child process ini sudah selesai dijalankan, process akan dinonaktifkan selama 5 detik lalu kembali melakukan iterasi hingga jumlah gambar yang ter-download mencapai 10 gambar.
 
                             generate_statustxt(folder_name);
                             char folder_name_zip[100];
@@ -303,12 +312,13 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                             char *argv[] = {"zip", "-qrm", folder_name_zip, folder_name, NULL};
                             execv("/usr/bin/zip", argv);
                         }
+                        
+* Jika sepuluh gambar sudah terdownload, maka program akan menjalankan fungsi **generate_statustxt** untuk membuat file berisi string "Download Success" yang telah dienkripsi.
+* Setelah itu membuat zip dengan nama yang sama dengan folder dan mengeksekusi perintah ini menggunakan parameter **zip**.
+                    
                     }
                     else sleep(40);
             }
         }
 
-
-
-
-
+* Ketika program sudah melakukan semua perintah iterasi download gambar hingga me-zip folder, program akan dinonaktifkan selama 40 detik sebelum kembali menjalankan program.
