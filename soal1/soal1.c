@@ -21,8 +21,7 @@ char* kue[] = {"https://drive.google.com/uc?id=1ZG8nRBRPquhYXq_sISdsVcXx5VdEgi-J
 
 char* hewan[] = {"Musik_for_stefany.zip","Film_for_stefany.zip", "Foto_for_stefany.zip"};
 char* buah[] = {"Musyik", "Fylm", "Pyoto"};
-
-
+char* matematika[] = {"MUSIK", "FILM", "FOTO"};
 
 void cobafork(int i){
 
@@ -33,7 +32,7 @@ void cobafork(int i){
 
         if (pid0 == 0) {
             printf("child[1] --> pid = %d and ppid = %d\n", getpid(), getppid());
-            char *argva[] = {"wget", "--no-check-certificate", kue[i], "-O", hewan[i], NULL};
+            char *argva[] = {"wget", "--no-check-certificate", kue[i], "-qO", hewan[i], NULL};
             execv("/usr/bin/wget", argva);
         }
     
@@ -51,16 +50,18 @@ void cobafork(int i){
                     // sleep(2);
                     printf("parent --> pid = %d\nppid: %d\n", getpid(), getppid());
                     // sleep(6);
-                    char lapres[5] = "/*";
+                    char lapres[5] = "/.", laprak[5] = "/";
                     char fisika[20], kimia[20];
-                    char *matematika[] = {"MUSIK", "FILM", "FOTO"};
-                    strcpy(fisika, buah[i]);
                     strcpy(kimia, matematika[i]);
-                    strcat(fisika, lapres);
-                    strcat(kimia, lapres);
-                    char *argvc[] = {"mv", kimia, fisika, NULL};
-                    printf("\n\n");
-                    execv("/bin/mv", argvc);
+                    strcpy(fisika, buah[i]);
+                    strcat(kimia, lapres); //MUSIK/*
+                    // strcat(fisika, laprak); //Musyik/*
+                    // cobagenerate(kimia, fisika, hewan[i]);
+                    char *argvc[] = {"cp", "-r", kimia, fisika, NULL};
+                    printf("\n----------OTW Move----------\n");
+                    execv("/bin/cp", argvc);
+                    // char *argvc[] = {"sh", "move.sh", NULL};
+                    // execv("/bin/bash", argvc);
             }
         }
 
@@ -68,46 +69,26 @@ void cobafork(int i){
     return;
 }
 
-void penutupan(){
+int penutupan(){
 
     pidv0 = fork();
     if (pidv0 < 0) exit(EXIT_FAILURE);
 
     if (pidv0 == 0){
-        char *argv0[] = {"zip", "-q", "Lopyu_Stevany.zip", buah[0], buah[1], buah[2], NULL};
+        printf("\n---------All files zipped----------\n");
+        char *argv0[] = {"zip", "-qr","Lopyu_Stevany.zip", buah[0], buah[1], buah[2], NULL};
         execv("/usr/bin/zip", argv0);
 
     }
     else {
-        while(wait(&mantab) > 0);
-        char *argv1[] = {"rm", "-r", buah[0], buah[1], buah[2], NULL};
-        execv("/usr/bin/rm", argv1);
+        while((wait(&mantab)) > 0);
+        printf("\n----------Folder Deleted----------\n");
+        char *argv1[] = {"rm", "-r", buah[0], buah[1], buah[2], matematika[0], matematika[1], matematika[2], NULL};
+        execv("/bin/rm", argv1);
 
     }
+    return 1;
 
-}
-
-int libur(int day, int month, int year, int hours, int minutes, int seconds){
-    
-    if(
-        day == 9 &&
-        month == 4 &&
-        year == 2021 &&
-        hours == 22 &&
-        minutes == 22 &&
-        seconds == 0
-    ) return 1;
-
-    if(
-        day == 9 &&
-        month == 4 &&
-        year == 2021 &&
-        hours == 16 &&
-        minutes == 22 &&
-        seconds == 0
-    ) return 2;
-
-    else return 0;
 }
 
 int deadline(){
@@ -135,19 +116,19 @@ int deadline(){
         day == 9 &&
         month == 4 &&
         year == 2021 &&
-        hours == 22 &&
-        minutes == 22 &&
-        seconds == 0
-    ) return 2;
-
-    if(
-        day == 9 &&
-        month == 4 &&
-        year == 2021 &&
         hours == 16 &&
         minutes == 22 &&
         seconds == 0
     ) return 1;
+    
+    else if(
+        day == 9 &&
+        month == 4 &&
+        year == 2021 &&
+        hours == 22 &&
+        minutes == 22 &&
+        seconds == 0
+    ) return 2;
 
     else return 0;
 }
@@ -181,8 +162,8 @@ int main(){
 
     while (1){
         int batas = deadline();
-        if (batas == 1){
-            printf("Masuk 1");
+        if (batas > 0 && batas == 1){
+            printf("----------Masuk 1----------\n");
             pidsup = fork();
 
             if (pidsup < 0)
@@ -192,6 +173,12 @@ int main(){
                 char *argv[] = {"mkdir", "-p", "Musyik", "Fylm", "Pyoto", NULL};
                 execv("/bin/mkdir", argv);
                 // sleep(bobok);
+                
+                // if (fork() == 0){
+                //     char *argvc[] = {"rm", hewan[0], hewan[1], hewan[2], NULL};
+                //     execv("/bin/rm", argvc);
+
+                // }
                 
             }
         
@@ -219,7 +206,7 @@ int main(){
                         }
                         else{
                             while((wait(&mantab)) > 0);
-                            printf("Selesai\n");
+                            printf("----------Selesai----------\n");
                             continue;
 
                         }
@@ -231,16 +218,15 @@ int main(){
 
         }
 
-        if(batas == 2){
-            printf("Masuk 2");
-            penutupan();
-            break;
+        if(batas > 0 && batas == 2){
+            printf("----------Masuk 2----------\n");
+            // penutupan();
+            if (penutupan() == 1) break;
 
         }
-        else printf("Salah lur\n");
+        else printf("Waiting...\n");
         sleep(1);
     }
 
-    
 
 }
