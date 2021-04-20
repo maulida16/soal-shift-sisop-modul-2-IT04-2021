@@ -139,6 +139,11 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
 * Fungsi fprintf digunakan untuk menulis string ke dalam file target yaitu **killer.sh** yang merupakan program bash.
 * Di fungsi **generateKiller** inilah kami memastikan bahwa kedua mode kill dapat dijalankan. Kami menggunakan fungsi strcmp untuk memastikan bahwa string yang dimasukkan adalah benar. Alasan kami menggunakan pkill dibanding dengan kill adalah karena pada saat kami mencoba trial & error nya, pkill bisa mematikan semua proses dengan nama yang sama, sedangkan kill hanya bisa mematikan proses dengan PID yang disebutkan. 
             
+<<<<<<< HEAD
+=======
+ * Selanjutnya kami membuat fungsi killer untuk mengakhiri program yang dijalankan. Fungsi killer ini akan menyimpan alamat dari **killer.sh**. Kami akan memanggilnya menggunakan fungsi **fopen** dengan mode "w" yang digunakan untuk membuka file untuk ditulis. 
+                
+>>>>>>> efe3d389dce7f7943e7536aaba2278e0ca3dcaea
                 //mode 1 (-z)
             if (strcmp(source, "-z") == 0)
                 fprintf(target, "#!/bin/bash\npkill -9 soal3\nrm killer.sh");
@@ -255,8 +260,12 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                             char *argv[] = {"mkdir", "-p", folder_name, NULL};
                             execv("/bin/mkdir", argv);
                         }
+<<<<<<< HEAD
                                     
 * Jika program sudah tidak berada dalam child process atau fork mengembalikan nilai positif yang mana PID dari child akan dikembalikan ke parent, maka program akan membuat perulangan untuk mendownload gambar hingga 10 gambar. Program akan mendownload gambar jika fork berhasil membuat child proses dan selanjutnya program akan berpindah ke direktori dari folder yang sudah dibuat tadi.
+=======
+* Dilanjutkan dengan kondisi jika program berhasil membuat child process, dan jika fork berhasil mengembalikan nilai 0 yang berarti child process benar-benar berjalan, maka selanjutnya yang terjadi adalah dibuatnya sebuah argument values yang membuat sebuah folder dengan nama yang akan diatur di **folder_name**.
+>>>>>>> efe3d389dce7f7943e7536aaba2278e0ca3dcaea
 
                         //klo nggak di dalem child
                         else {
@@ -289,7 +298,11 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                                     //url buat donwload gambar persegi txt
                                     sprintf(url, "https://picsum.photos/%d", t);
                                     
+<<<<<<< HEAD
 * Setelah itu kami membuat variabel untuk menyimpan nama file yang berisi waktu lokal yang didapatkan dari file_tm_info. Lalu mendownload filenya menggunakan parameter **wget** dari variabel url tadi dan dieksekusi menggunakan **execv**.
+=======
+* Selanjutnya kami mendeklarasikan variabel **url** untuk menyimpan url dari website yang digunakan untuk mendownload gambar. Kami memasukkan url tersebut ke variabel **url** menggunakan fungsi **sprintf**.
+>>>>>>> efe3d389dce7f7943e7536aaba2278e0ca3dcaea
 
                                     char file_name[100];
                                     //set nama filenya
@@ -298,7 +311,11 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                                     char *argv[] = {"wget", url, "-qO", file_name, NULL};
                                     execv("/usr/bin/wget", argv);
                                 }
+<<<<<<< HEAD
 * Ketika child process ini sudah selesai dijalankan, process akan dinonaktifkan selama 5 detik lalu kembali melakukan iterasi hingga jumlah gambar yang ter-download mencapai 10 gambar.
+=======
+* Setelah itu kami membuat variabel untuk menyimpan nama file yang berisi waktu lokal yang didapatkan dari file_tm_info. Lalu mendownload filenya menggunakan parameter **wget** dari variabel **url** tadi dan dieksekusi menggunakan **execv**.
+>>>>>>> efe3d389dce7f7943e7536aaba2278e0ca3dcaea
 
                             //loop downloadnya dijalanin tiap 5 detik
                             sleep(5);
@@ -313,12 +330,22 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                             //bikin file zip (compress) namanya sesuai yang udah di set
                             char *argv[] = {"zip", "-qrm", folder_name_zip, folder_name, NULL};
                             execv("/usr/bin/zip", argv);
-                        }
+                        }  
                         
+<<<<<<< HEAD
 
 * Ketika program sudah melakukan semua perintah iterasi download gambar hingga me-zip folder, program akan dinonaktifkan selama 40 detik sebelum kembali menjalankan program.
+=======
+* Jika sepuluh gambar sudah terdownload, maka program akan menjalankan fungsi **generate_statustxt** untuk membuat file bernama **status.txt** ke dalam folder yang tadi telah dibuat. File tersebut berisi string "Download Success" yang telah dienkripsi.
+* Setelah itu membuat zip dengan nama yang sama dengan folder dan mengeksekusi perintah ini menggunakan parameter **zip**.
+>>>>>>> efe3d389dce7f7943e7536aaba2278e0ca3dcaea
                     
                     }
                     else sleep(40);
             }
         }
+<<<<<<< HEAD
+=======
+
+* Ketika program sudah melakukan semua perintah dari iterasi download gambar hingga me-zip folder, program akan dinonaktifkan selama 40 detik sebelum kembali menjalankan program lagi.
+>>>>>>> efe3d389dce7f7943e7536aaba2278e0ca3dcaea
