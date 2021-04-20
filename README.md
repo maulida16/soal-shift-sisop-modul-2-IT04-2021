@@ -134,7 +134,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             target = fopen("killer.sh", "w");
             int status;
             
- * Selanjutnya kami membuat fungsi killer untuk mengakhiri program yang dijalankan. Fungsi killer ini akan menyimpan alamat dari **killer.sh** dimana kami akan memanggilnya menggunakan fungsi **fopen** dengan mode "w" yang digunakan untuk membuka file untuk ditulis. 
+ * Selanjutnya kami membuat fungsi killer untuk mengakhiri program yang dijalankan. Fungsi killer ini akan menyimpan alamat dari **killer.sh**. Kami akan memanggilnya menggunakan fungsi **fopen** dengan mode "w" yang digunakan untuk membuka file untuk ditulis. 
                 
                 //mode 1 (-z)
             if (strcmp(source, "-z") == 0)
@@ -254,7 +254,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                             char *argv[] = {"mkdir", "-p", folder_name, NULL};
                             execv("/bin/mkdir", argv);
                         }
-* Dilanjutkan dengan kondisi jika program berhasil membuat child process dan jika fork berhasil mengembalikan nilai 0 yang dapat memastikan bahwa child process benar-benar berjalan, maka selanjutnya yang terjadi adalah dibuatnya sebuah argument values yang membuat sebuah folder dengan nama yang akan diatur di **folder_name**.
+* Dilanjutkan dengan kondisi jika program berhasil membuat child process, dan jika fork berhasil mengembalikan nilai 0 yang berarti child process benar-benar berjalan, maka selanjutnya yang terjadi adalah dibuatnya sebuah argument values yang membuat sebuah folder dengan nama yang akan diatur di **folder_name**.
 
                         //klo nggak di dalem child
                         else {
@@ -288,7 +288,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                                     //url buat donwload gambar persegi txt
                                     sprintf(url, "https://picsum.photos/%d", t);
                                     
-* Selanjutnya kami mendeklarasikan variabel url untuk menyimpan url dari website yang digunakan untuk mendownload gambar. Kami memasukkan url tersebut ke file url menggunakan fungsi **sprintf**.
+* Selanjutnya kami mendeklarasikan variabel **url** untuk menyimpan url dari website yang digunakan untuk mendownload gambar. Kami memasukkan url tersebut ke variabel **url** menggunakan fungsi **sprintf**.
 
                                     char file_name[100];
                                     //set nama filenya
@@ -297,7 +297,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                                     char *argv[] = {"wget", url, "-qO", file_name, NULL};
                                     execv("/usr/bin/wget", argv);
                                 }
-* Setelah itu kami membuat variabel untuk menyimpan nama file yang berisi waktu lokal yang didapatkan dari file_tm_info. Lalu mendownload filenya menggunakan parameter **wget** dari variabel url tadi dan dieksekusi menggunakan **execv**.
+* Setelah itu kami membuat variabel untuk menyimpan nama file yang berisi waktu lokal yang didapatkan dari file_tm_info. Lalu mendownload filenya menggunakan parameter **wget** dari variabel **url** tadi dan dieksekusi menggunakan **execv**.
 
                             //loop downloadnya dijalanin tiap 5 detik
                             sleep(5);
@@ -311,9 +311,9 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                             //bikin file zip (compress) namanya sesuai yang udah di set
                             char *argv[] = {"zip", "-qrm", folder_name_zip, folder_name, NULL};
                             execv("/usr/bin/zip", argv);
-                        }
+                        }  
                         
-* Jika sepuluh gambar sudah terdownload, maka program akan menjalankan fungsi **generate_statustxt** untuk membuat file berisi string "Download Success" yang telah dienkripsi.
+* Jika sepuluh gambar sudah terdownload, maka program akan menjalankan fungsi **generate_statustxt** untuk membuat file bernama **status.txt** ke dalam folder yang tadi telah dibuat. File tersebut berisi string "Download Success" yang telah dienkripsi.
 * Setelah itu membuat zip dengan nama yang sama dengan folder dan mengeksekusi perintah ini menggunakan parameter **zip**.
                     
                     }
@@ -321,4 +321,4 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             }
         }
 
-* Ketika program sudah melakukan semua perintah iterasi download gambar hingga me-zip folder, program akan dinonaktifkan selama 40 detik sebelum kembali menjalankan program.
+* Ketika program sudah melakukan semua perintah dari iterasi download gambar hingga me-zip folder, program akan dinonaktifkan selama 40 detik sebelum kembali menjalankan program lagi.
