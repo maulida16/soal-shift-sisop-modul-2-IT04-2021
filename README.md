@@ -217,7 +217,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
           //while untuk membuat folder dan zip
                 while (1) {
                 
-* **while(1)** berarti infinite loop
+* **while(1)** berarti infinite loop.
 
                     timer = time(NULL);
                     tm_info = localtime(&timer);
@@ -236,12 +236,15 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                     
 * Selanjutnya kami membuat variabel untuk menjalankan fork
 
-                    //nggak tau buat apa
                     int status;
+                    
+* Di sini kami membuat deklarasi untuk exit function yaitu dengan **int status**. Ini bertujuan untuk menutup semua proses yang berjalan dan setiap child proses yang mendapat nilai 1, program akan dijalankan dan parent process akan memanggil sinyal SIGCHLD.
 
                     //exit klo gagal
                     if (child_id < 0) 
                     exit(EXIT_FAILURE);
+                    
+* Selanjutnya dibuat kondisi jika spawaning proses gagal dijalankan, atau fork mengembalikan nilai negatif, maka program akan terhenti.
 
                     //klo berhasil bikin child
                     if (child_id == 0){ 
@@ -251,6 +254,8 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                             char *argv[] = {"mkdir", "-p", folder_name, NULL};
                             execv("/bin/mkdir", argv);
                         }
+* Dilanjutkan dengan kondisi jika program berhasil membuat child process dan jika fork berhasil mengembalikan nilai 0 yang dapat memastikan bahwa child process benar-benar berjalan, maka selanjutnya yang terjadi adalah dibuatnya sebuah argument values yang membuat sebuah folder dengan nama yang akan diatur di **folder_name**.
+
                         //klo nggak di dalem child
                         else {
                             //tunggu childnya mati/exit
@@ -261,11 +266,13 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                                 if (fork() == 0){
                                     //ganti pwd ke folde baru tadi
                                     chdir(folder_name);
+                                   
+                                    
+* Jika program sudah tidak berada dalam child process atau fork mengembalikan nilai positif yang mana PID dari child akan dikembalikan ke parent, maka program akan membuat perulangan untuk mendownload gambar hingga 10 gambar. Program akan mendownload gambar jika fork berhasil membuat child proses dan selanjutnya program akan berpindah ke direktori dari folder yang sudah dibuat tadi.
+
                                     //bikin var buat timer
                                     time_t file_timer;
-                                    //iki lapo mbuh
                                     struct tm* file_tm_info;
-
                                     file_timer = time(NULL);
                                     file_tm_info = localtime(&file_timer);
 
