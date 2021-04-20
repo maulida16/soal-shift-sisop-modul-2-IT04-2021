@@ -77,6 +77,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
 ### Penyelesaian
 
 * Source code lengkap ada di [Soal 3](https://github.com/maulida16/soal-shift-sisop-modul-2-IT04-2021/blob/main/soal3/soal3.c)
+* Diatas merupakan library yang akan digunakan di kode program soal 3 ini.
 
         #include <sys/stat.h>
         #include <sys/types.h>
@@ -90,7 +91,10 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
         #include <string.h>
         #include <time.h>
     
-* Diatas merupakan library yang akan digunakan di kode program soal 3 ini.
+
+* Di awal program kami membuat fungsi bernama itik. Fungsi itik ini merupakan program caesar chiper untuk mengenkripsi keterangan yang akan dikeluarkan saat program berhasil dijalankan. Kami menggunakan perulangan yang akan mengiterasi huruf pada **message[i]** lalu menambahkannya dengan key.
+* Pergeseran kunci berlaku baik untuk huruf kecil maupun huruf besar.
+* **symbol = message[i];** digunakan sebagai variabel sementara untuk menampung huruf-huruf yang sudah ditambah oleh key-nya. Setelah pesan dalam variabel **symbol** terenskripsi, semua isinya akan dipindah ke variabel array **encrypted**. Setelah itu akan di tampilkan hasil enkripsinya menggunakan fungsi **printf**.
 
         char sandi[100];
 
@@ -124,27 +128,24 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
       printf("%s", sandi);
       }
 
-* Di awal program kami membuat fungsi bernama itik. Fungsi itik ini merupakan program caesar chiper untuk mengenkripsi keterangan yang akan dikeluarkan saat program berhasil dijalankan. Kami menggunakan perulangan yang akan mengiterasi huruf pada **message[i]** lalu menambahkannya dengan key.
-* Pergeseran kunci berlaku baik untuk huruf kecil maupun huruf besar.
-* **symbol = message[i];** digunakan sebagai variabel sementara untuk menampung huruf-huruf yang sudah ditambah oleh key-nya. Setelah pesan dalam variabel **symbol** terenskripsi, semua isinya akan dipindah ke variabel array **encrypted**. Setelah itu akan di tampilkan hasil enkripsinya menggunakan fungsi **printf**.
-
+ * Selanjutnya kami membuat fungsi killer untuk mengakhiri program yang dijalankan. Fungsi killer ini akan menyimpan alamat dari **killer.sh** dimana kami akan memanggilnya menggunakan fungsi **fopen** dengan mode "w" yang digunakan untuk membuka file untuk ditulis. 
+                
         void generateKiller(char source[]){
             FILE *target;
             //buka/jalankan file killer.sh
             target = fopen("killer.sh", "w");
             int status;
+
+* Fungsi fprintf digunakan untuk menulis string ke dalam file target yaitu **killer.sh** yang merupakan program bash.
+* Di fungsi **generateKiller** inilah kami memastikan bahwa kedua mode kill dapat dijalankan. Kami menggunakan fungsi strcmp untuk memastikan bahwa string yang dimasukkan adalah benar. Alasan kami menggunakan pkill dibanding dengan kill adalah karena pada saat kami mencoba trial & error nya, pkill bisa mematikan semua proses dengan nama yang sama, sedangkan kill hanya bisa mematikan proses dengan PID yang disebutkan. 
             
- * Selanjutnya kami membuat fungsi killer untuk mengakhiri program yang dijalankan. Fungsi killer ini akan menyimpan alamat dari **killer.sh** dimana kami akan memanggilnya menggunakan fungsi **fopen** dengan mode "w" yang digunakan untuk membuka file untuk ditulis. 
-                
                 //mode 1 (-z)
             if (strcmp(source, "-z") == 0)
                 fprintf(target, "#!/bin/bash\npkill -9 soal3\nrm killer.sh");
                 //mode 2 (-x)
             if (strcmp(source, "-x") == 0)
                 fprintf(target, "#!/bin/bash\npkill soal3\nrm killer.sh");
-
-* Fungsi fprintf digunakan untuk menulis string ke dalam file target yaitu **killer.sh** yang merupakan program bash.
-* Di fungsi **generateKiller** inilah kami memastikan bahwa kedua mode kill dapat dijalankan. Kami menggunakan fungsi strcmp untuk memastikan bahwa string yang dimasukkan adalah benar. Alasan kami menggunakan pkill dibanding dengan kill adalah karena pada saat kami mencoba trial & error nya, pkill bisa mematikan semua proses dengan nama yang sama, sedangkan kill hanya bisa mematikan proses dengan PID yang disebutkan. 
+* Ketika dijalankan dengan mode kedua yang menggunakan parameter "-x", program akan berjalan di background sehingga untuk mengakses killer.sh perlu diganti modenya dengan menambahkan hak eksekusi ke user menggunakan "chmod", "u+x". Jika fungsi killer sudah berjalan dengan baik, maka akan dihentikan menggunakan fungsi **fclose**.
 
             if(fork() == 0){
               //set permission buat file killer biar 
@@ -154,7 +155,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             fclose(target);
         }
         
-* Ketika dijalankan dengan mode kedua yang menggunakan parameter "-x", program akan berjalan di background sehingga untuk mengakses killer.sh perlu diganti modenya dengan menambahkan hak eksekusi ke user menggunakan "chmod", "u+x". Jika fungsi killer sudah berjalan dengan baik, maka akan dihentikan menggunakan fungsi **fclose**.
+* Berikutnya kami membuat program untuk membuat sebuah file bernama **status.txt**. File inilah yang akan menyimpan string "Download Success" yang kemudian dienkripsi menggnakan fungsi **itik**. 
 
         void generate_statustxt(char folder_local[]){
 
@@ -174,17 +175,18 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             //set nama file zip
             fclose(status_txt);
         }
-* Berikutnya kami membuat program untuk membuat sebuah file bernama **status.txt**. File inilah yang akan menyimpan string "Download Success" yang kemudian dienkripsi menggnakan fungsi **itik**. 
 
 * Proses selanjutnya adalah fungsi main dimana kami menggunakan fungsi template **Daemon Proses** dari modul yang telah diberikan.
+
+* Program main kami akan membutuhkan argv dan argc untuk mengetahui berapa banyak dan apa saja parameter yang digunakan untuk mengeksekusi program. Jika jumlah parameter yang diberikan tidak sama dengan 2, maka program tidak akan berjalan.
 
         int main(int argc, char **argv){
             if(argc != 2){
                 puts("argument is not valid");
                 exit(EXIT_FAILURE);
             }
-
-* Program main kami akan membutuhkan argv dan argc untuk mengetahui berapa banyak dan apa saja parameter yang digunakan untuk mengeksekusi program. Jika jumlah parameter yang diberikan tidak sama dengan 2, maka program tidak akan berjalan.
+* **time_t** adalah sebuah fungsi yang akan mengembalikan waktu saat ini.
+* Kami membuat fungsi mennggunakan <em>time structure</em> yang diberi nama **tm_info**. Fungsi ini berfungsi sebagai sebuah pointer fungsi yang akan mengambil value dari timer.
 
             generateKiller(argv[1]);
 
@@ -211,40 +213,39 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             time_t timer;
             struct tm* tm_info;
             
-* **time_t** adalah sebuah fungsi yang akan mengembalikan waktu saat ini.
-* Kami membuat fungsi mennggunakan <em>time structure</em> yang diberi nama **tm_info**. Fungsi ini berfungsi sebagai sebuah pointer fungsi yang akan mengambil value dari timer.
+* **while(1)** berarti infinite loop.
 
           //while untuk membuat folder dan zip
                 while (1) {
                 
-* **while(1)** berarti infinite loop.
+* Di awal perulangan, timer diset dengan NULL terlebih dahulu, lalu di tm_info akan diisi waktu oleh jadwal kalender saat itu juga.
 
                     timer = time(NULL);
                     tm_info = localtime(&timer);
                     
-* Di awal perulangan, timer diset dengan NULL terlebih dahulu, lalu di tm_info akan diisi waktu oleh jadwal kalender saat itu juga.
+* Di sini kami membuat folder yang namanya berdasarkan waktu saat ini, dan waktunya diambil dari **tm_info**
                     
                     char folder_name[100];
                     //formatnya beda, jangan luapa diganti
                     strftime(folder_name, 100, "%Y-%m-%d_%H:%M:%S", tm_info);
                     
-* Di sini kami membuat folder yang namanya berdasarkan waktu saat ini, dan waktunya diambil dari **tm_info**
+* Selanjutnya kami membuat variabel untuk menjalankan fork.
 
                     //bikin var pid buat child, jalanin fork()
                     pid_t child_id;
                     child_id = fork();
                     
-* Selanjutnya kami membuat variabel untuk menjalankan fork.
+* Di sini kami membuat deklarasi untuk exit function yaitu dengan **int status**. "status" bertujuan untuk menutup semua proses yang berjalan dan setiap child proses yang mendapat nilai 1, program akan dijalankan dan parent process akan memanggil sinyal SIGCHLD.
 
                     int status;
                     
-* Di sini kami membuat deklarasi untuk exit function yaitu dengan **int status**. "status" bertujuan untuk menutup semua proses yang berjalan dan setiap child proses yang mendapat nilai 1, program akan dijalankan dan parent process akan memanggil sinyal SIGCHLD.
+* Selanjutnya dibuat kondisi jika spawning proses gagal dijalankan, atau fork mengembalikan nilai negatif, maka program akan terhenti.
 
                     //exit klo gagal
                     if (child_id < 0) 
                     exit(EXIT_FAILURE);
                     
-* Selanjutnya dibuat kondisi jika spawning proses gagal dijalankan, atau fork mengembalikan nilai negatif, maka program akan terhenti.
+* Dilanjutkan dengan kondisi jika program berhasil membuat child process dan jika fork berhasil mengembalikan nilai 0 yang dapat memastikan bahwa child process benar-benar berjalan, maka selanjutnya yang terjadi adalah dibuatnya sebuah argument values yang membuat sebuah folder dengan nama yang akan diatur di **folder_name**.
 
                     //klo berhasil bikin child
                     if (child_id == 0){ 
@@ -254,7 +255,8 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                             char *argv[] = {"mkdir", "-p", folder_name, NULL};
                             execv("/bin/mkdir", argv);
                         }
-* Dilanjutkan dengan kondisi jika program berhasil membuat child process dan jika fork berhasil mengembalikan nilai 0 yang dapat memastikan bahwa child process benar-benar berjalan, maka selanjutnya yang terjadi adalah dibuatnya sebuah argument values yang membuat sebuah folder dengan nama yang akan diatur di **folder_name**.
+                                    
+* Jika program sudah tidak berada dalam child process atau fork mengembalikan nilai positif yang mana PID dari child akan dikembalikan ke parent, maka program akan membuat perulangan untuk mendownload gambar hingga 10 gambar. Program akan mendownload gambar jika fork berhasil membuat child proses dan selanjutnya program akan berpindah ke direktori dari folder yang sudah dibuat tadi.
 
                         //klo nggak di dalem child
                         else {
@@ -267,28 +269,27 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                                     //ganti pwd ke folde baru tadi
                                     chdir(folder_name);
                                    
-                                    
-* Jika program sudah tidak berada dalam child process atau fork mengembalikan nilai positif yang mana PID dari child akan dikembalikan ke parent, maka program akan membuat perulangan untuk mendownload gambar hingga 10 gambar. Program akan mendownload gambar jika fork berhasil membuat child proses dan selanjutnya program akan berpindah ke direktori dari folder yang sudah dibuat tadi.
+* Kami menggunakan library **time.h** yang berfungsi sebagai penyimpanan waktu download file.
 
                                     //bikin var buat timer
                                     time_t file_timer;
                                     struct tm* file_tm_info;
                                     file_timer = time(NULL);
                                     file_tm_info = localtime(&file_timer);
-                                    
-* Kami menggunakan library **time.h** yang berfungsi sebagai penyimpanan waktu download file.
                                   
+* Deklarasi variabel ini digunakan untuk menyimpan ukuran dari gambar yang akan di download dimana **t** sendiri diambil dari detik waktu Epoch UNIX.                               
+                                    
                                     //t = waktu epoch
                                     int t = (int)time(NULL);
                                     t = (t % 1000) + 100;
                                     
-* Deklarasi variabel ini digunakan untuk menyimpan ukuran dari gambar yang akan di download dimana **t** sendiri diambil dari detik waktu Epoch UNIX.                               
+* Selanjutnya kami mendeklarasikan variabel url untuk menyimpan url dari website yang digunakan untuk mendownload gambar. Kami memasukkan url tersebut ke file url menggunakan fungsi **sprintf**.
 
                                     char url[100];
                                     //url buat donwload gambar persegi txt
                                     sprintf(url, "https://picsum.photos/%d", t);
                                     
-* Selanjutnya kami mendeklarasikan variabel url untuk menyimpan url dari website yang digunakan untuk mendownload gambar. Kami memasukkan url tersebut ke file url menggunakan fungsi **sprintf**.
+* Setelah itu kami membuat variabel untuk menyimpan nama file yang berisi waktu lokal yang didapatkan dari file_tm_info. Lalu mendownload filenya menggunakan parameter **wget** dari variabel url tadi dan dieksekusi menggunakan **execv**.
 
                                     char file_name[100];
                                     //set nama filenya
@@ -297,13 +298,14 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                                     char *argv[] = {"wget", url, "-qO", file_name, NULL};
                                     execv("/usr/bin/wget", argv);
                                 }
-* Setelah itu kami membuat variabel untuk menyimpan nama file yang berisi waktu lokal yang didapatkan dari file_tm_info. Lalu mendownload filenya menggunakan parameter **wget** dari variabel url tadi dan dieksekusi menggunakan **execv**.
+* Ketika child process ini sudah selesai dijalankan, process akan dinonaktifkan selama 5 detik lalu kembali melakukan iterasi hingga jumlah gambar yang ter-download mencapai 10 gambar.
 
                             //loop downloadnya dijalanin tiap 5 detik
                             sleep(5);
                             }
                             
-* Ketika child process ini sudah selesai dijalankan, process akan dinonaktifkan selama 5 detik lalu kembali melakukan iterasi hingga jumlah gambar yang ter-download mencapai 10 gambar.
+* Jika sepuluh gambar sudah terdownload, maka program akan menjalankan fungsi **generate_statustxt** untuk membuat file berisi string "Download Success" yang telah dienkripsi.
+* Setelah itu membuat zip dengan nama yang sama dengan folder dan mengeksekusi perintah ini menggunakan parameter **zip**.
 
                             generate_statustxt(folder_name);
                             char folder_name_zip[100];
@@ -313,12 +315,10 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                             execv("/usr/bin/zip", argv);
                         }
                         
-* Jika sepuluh gambar sudah terdownload, maka program akan menjalankan fungsi **generate_statustxt** untuk membuat file berisi string "Download Success" yang telah dienkripsi.
-* Setelah itu membuat zip dengan nama yang sama dengan folder dan mengeksekusi perintah ini menggunakan parameter **zip**.
+
+* Ketika program sudah melakukan semua perintah iterasi download gambar hingga me-zip folder, program akan dinonaktifkan selama 40 detik sebelum kembali menjalankan program.
                     
                     }
                     else sleep(40);
             }
         }
-
-* Ketika program sudah melakukan semua perintah iterasi download gambar hingga me-zip folder, program akan dinonaktifkan selama 40 detik sebelum kembali menjalankan program.
