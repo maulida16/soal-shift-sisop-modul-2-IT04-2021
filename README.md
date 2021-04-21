@@ -67,8 +67,8 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
 * Untuk memudahkan proses, kami menggunakan variabel array yang dapat menampung semua tipe string yang akan dijalankan/dilakukan. 
 * Array **kue[]** digunakan untuk menyimpan semua url dari musik, video, dan foto yang dibutuhkan.
 * Array **hewan[]** digunakan untuk menyimpan nama zip dari file yang di download. 
-* Array **buah[]** digunakan untuk menyimpan nama folder.
-* Array **matematika[]** digunakan untuk
+* Array **buah[]** digunakan untuk menyimpan nama folder yang disukai Stevany.
+* Array **matematika[]** digunakan untuk folder utama.
 
         void cobafork(int i){
 
@@ -77,7 +77,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
             if (pid0 < 0)
             exit(EXIT_FAILURE);
 
-* Kami membuat fungsi bernama **cobafork** yang akan digunakan untuk proses pengunduhan file hingga memindahkan semua hasil download ke folder yang ditentukan.
+* Kami membuat fungsi bernama **cobafork** dengan parameter integer untuk mengakses value array. Fungsi ini yang akan digunakan untuk proses pengunduhan file hingga memindahkan semua hasil download ke folder yang ditentukan.
 * Jika **fork()** dari proses spawning mengembalikan nilai negatif, maka program tidak akan berjalan.
 
             if (pid0 == 0) {
@@ -87,8 +87,8 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
             }
 
 * Selanjutnya kami membuat kondisi lanjutan dimana jika **fork()** mengembalikan nilai 0, artinya berhasil membuat child process.
-* Kami akan mendapatkan PID dan PPID dari child process ini menggunakan **getpid()** dan **getppid()** yang akan ditampilkan melalui output.
-* Berikutnya kami membuat argument values untuk menyimpan paramter yang digunakan untuk mengunduh file-file yang dibutuhkan dari link yang ada di array **kue[]** dan menyimpannya dengan nama yang ada di variabel **hewan[]**.
+* Kami akan mendapatkan PID dan PPID dari child process ini menggunakan **getpid()** dan **getppid()** yang akan ditampilkan melalui output. Kami melakukan pengecekan ini untuk memastikan tidak ada terjadinya orphan process.
+* Berikutnya kami membuat argument values untuk menyimpan paramter yang digunakan untuk mengunduh file-file yang dibutuhkan dari link yang ada di array **kue[i]** dan menyimpannya dengan nama yang ada di variabel **hewan[i]**.
 * Lalu kami mengeksekusi parameter tersebut menggunakan fungsi **execv**
            
             else {
@@ -106,21 +106,16 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
 
                 else {
                     while((wait(&status)) > 0);
-                        // sleep(2);
-                        printf("parent --> pid = %d\nppid: %d\n", getpid(), getppid());
-                        // sleep(6);
+                      
+                        printf("parent --> pid = %d\nppid: %d\n", getpid(), getppid());                    
                         char lapres[5] = "/.", laprak[5] = "/";
                         char fisika[20], kimia[20];
-                        strcpy(kimia, matematika[i]);
-                        strcpy(fisika, buah[i]);
-                        strcat(kimia, lapres); //MUSIK/*
-                        // strcat(fisika, laprak); //Musyik/*
-                        // cobagenerate(kimia, fisika, hewan[i]);
+                        strcpy(kimia, matematika[i]); //matematika[] = {"MUSIK", "FILM", "FOTO"};
+                        strcpy(fisika, buah[i]); //buah[] = {"Musyik", "Fylm", "Pyoto"};
+                        strcat(kimia, lapres); //MUSIK/*                                   
                         char *argvc[] = {"cp", "-r", kimia, fisika, NULL};
                         printf("\n----------OTW Move----------\n");
                         execv("/bin/cp", argvc);
-                        // char *argvc[] = {"sh", "move.sh", NULL};
-                        // execv("/bin/bash", argvc);
                 }
             }
 
@@ -129,7 +124,12 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
         }
 
 * Jika semua proses child sudah selesai, maka selanjutnya adalah dijalankannya kembali parent process untuk melakukan pemindahan file ke folder yang telah ditentukan.
-* Terlebih dahulu kami mendapatkan PID dan PPID dari parent terlebih dahulu
+* Terlebih dahulu kami mendapatkan PID dan PPID dari parent
+* Setelah itu kami membuat variabel array **lapres[5]** yang berisi **/.** untuk memudahkan deklarasi path untuk masuk ke dalam folder yang diinginkan.
+* Alasan dibuatnya variabel array **fisika[20]** dan **kimia[20]** adalah untuk penampungan dari variabel **matematika[i]** dan **buah[i]**. Penampungan dilakukan dengan cara mencopy string dalam **buah[i]** dan **matematika[i]** ke dalam sana.
+* Lalu kami menggabungkan variabel **lapres[5]** dengan variabel **kimia** sehingga output yang diharapkan akan seperti ini: "MUSIK/"
+* Dilanjutkan dengan pembuatan parameter untuk memindahkan semua isi array **fisika** ke array **kimia** sehingga output yang diharapkan menjadi: "MUSIK/Musyik"
+
         int penutupan(){
 
             pidv0 = fork();
@@ -137,20 +137,24 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
 
             if (pidv0 == 0){
                 printf("\n---------All files zipped----------\n");
-                char *argv0[] = {"zip", "-qr","Lopyu_Stevany.zip", buah[0], buah[1], buah[2], NULL};
+                char *argv0[] = {"zip", "-qr","Lopyu_Stevany.zip", buah[0], buah[1], buah[2], NULL}; //buah[] = {"Musyik", "Fylm", "Pyoto"};
                 execv("/usr/bin/zip", argv0);
 
             }
             else {
                 while((wait(&mantab)) > 0);
                 printf("\n----------Folder Deleted----------\n");
-                char *argv1[] = {"rm", "-r", buah[0], buah[1], buah[2], matematika[0], matematika[1], matematika[2], NULL};
+                char *argv1[] = {"rm", "-r", buah[0], buah[1], buah[2], matematika[0], matematika[1], matematika[2], NULL}; //char* matematika[] = {"MUSIK", "FILM", "FOTO"};
                 execv("/bin/rm", argv1);
 
             }
             return 1;
 
         }
+
+* Selanjutnya kami membuat fungsi **penutupan**. 
+* Di fungsi ini proses child akan me-zip folder yang ada di array **buah[i]** ke dalam **Lopyu_Stevany.zip**.
+* Saat proses kembali ke parent, dilakukan penghapusan folder-folder yang ada di array **buah[]** dan **matematika[]**.
 
         int deadline(){
 
@@ -170,8 +174,9 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
             month = local->tm_mon + 1;
             year = local->tm_year + 1900;
 
-            // printf("Time details: %02d %02d %02d\n", hours, minutes, seconds);
-            // printf("Date details: %02d %02d %02d\n", day, month, year);
+* Fungsi **deadline** ini digunakan untuk membuat waktu yang dibutuhkan untuk proses otomatis. Fungsi ini diawali dengan pendekalarasian variabel untuk menyimpan data tanggal dan waktu di C.
+* **time()** digunakan untuk mengembalikan nilai waktu dari sistem.
+* **localtime()** akan mengubah nilai dari **time_t** ke waktu kalender dan mengembalikan pointer ke struktur **tm** dimana setiap isinya mendapatkan value yang sesuai dengan rangenya masing-masing. Sebagai contoh hours akan diisi dengan nilai waktu jam, minutes akan diisi dengan nilai waktu menit, dst.
 
             if(
                 day == 9 &&
@@ -181,6 +186,8 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
                 minutes == 22 &&
                 seconds == 0
             ) return 1;
+            
+* Dibuat sebuah kondisi yang akan mengembalikan nilai 1 jika waktu yang digunakan memenuhi deklarasi waktu seperti di atas. Waktu di atas adalah waktu di mana semua proses pengunduhan hingga pembuatan folder berjalan secara otomatis.
 
             else if(
                 day == 9 &&
@@ -190,9 +197,13 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
                 minutes == 22 &&
                 seconds == 0
             ) return 2;
+            
+* Dibuat sebuah kondisi yang akan mengembalikan nilai 2 jika waktu yang digunakan memenuhi deklarasi waktu seperti di atas. Di atas merupakan waktu dimana semua folder-folder dihapus dan hanya menyisakan semua zip.
 
             else return 0;
         }
+
+* Jika tidak memenuhi dua kriteria waktu di atas, maka akan dikembalikan nilai 0.
 
         int main(){
 
@@ -221,12 +232,17 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
             close(STDOUT_FILENO);
             close(STDERR_FILENO);
 
+* Menuju ke fungsi main, kami ambil code di atas dari proses Daemon yang sudah diberikan pada modul 2.
+
             while (1){
                 int batas = deadline();
                 if (batas > 0 && batas == 1){
                     printf("----------Masuk 1----------\n");
-                    pidsup = fork();
+                    
+* Fungsi **deadline** yang mengembalikan nila 1 digunakan sebagai parameter program untuk berjalan.
 
+                    pidsup = fork();
+                 
                     if (pidsup < 0)
                     exit(EXIT_FAILURE);
 
@@ -235,13 +251,9 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
                         execv("/bin/mkdir", argv);
                         // sleep(bobok);
 
-                        // if (fork() == 0){
-                        //     char *argvc[] = {"rm", hewan[0], hewan[1], hewan[2], NULL};
-                        //     execv("/bin/rm", argvc);
-
-                        // }
-
                     }
+
+* Ketika fungsi main berhasil membuat
 
                     else {
                         while((wait(&mantab)) > 0);
