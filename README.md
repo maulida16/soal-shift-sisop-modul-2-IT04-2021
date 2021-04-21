@@ -239,7 +239,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
                 if (batas > 0 && batas == 1){
                     printf("----------Masuk 1----------\n");
                     
-* Fungsi **deadline** yang mengembalikan nila 1 digunakan sebagai parameter program untuk berjalan.
+* Fungsi **deadline** yang mengembalikan nilai 1 digunakan sebagai parameter program untuk menjalankan fungsi **cobafork**.
 
                     pidsup = fork();
                  
@@ -249,11 +249,9 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
                     if (pidsup == 0) {
                         char *argv[] = {"mkdir", "-p", "Musyik", "Fylm", "Pyoto", NULL};
                         execv("/bin/mkdir", argv);
-                        // sleep(bobok);
-
                     }
 
-* Ketika fungsi main berhasil membuat
+* Ketika fungsi main berhasil membuat child process, dibuatlah parameter untuk membuat folder.
 
                     else {
                         while((wait(&mantab)) > 0);
@@ -267,7 +265,6 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
                             pidsup2 = fork();
                             if (pidsup2 == 0){
                                 cobafork(1);
-                                // sleep(bobok);
                             }
 
                             else {
@@ -275,7 +272,6 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
                                 pidsup3 = fork();
                                 if (pidsup3 == 0){
                                     cobafork(2);
-                                    // sleep(bobok);
                                 }
                                 else{
                                     while((wait(&mantab)) > 0);
@@ -290,6 +286,8 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
                     }
 
                 }
+                
+ * Jika sudah keluar dari child process, program akan menjalankan fungsi **coba fork** dari nilai **i** 0-2.
 
                 if(batas > 0 && batas == 2){
                     printf("----------Masuk 2----------\n");
@@ -297,6 +295,9 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
                     if (penutupan() == 1) break;
 
                 }
+
+* Setelah semua proses **cobafork** selesai, selanjutnya digunakan parameter fungsi deadline yang mengembalikan nilai 2, akan dijalankan fungsi **penutupan**
+
                 else printf("Waiting...\n");
                 sleep(1);
             }
