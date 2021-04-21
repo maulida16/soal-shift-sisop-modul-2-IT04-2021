@@ -68,7 +68,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
 * Array **kue[]** digunakan untuk menyimpan semua url dari musik, video, dan foto yang dibutuhkan.
 * Array **hewan[]** digunakan untuk menyimpan nama zip dari file yang di download. 
 * Array **buah[]** digunakan untuk menyimpan nama folder yang disukai Stevany.
-* Array **matematika[]** digunakan untuk folder utama.
+* Array **matematika[]** digunakan untuk menyimpan nama folder dari zip yang telah di ekstrak.
 
         void cobafork(int i){
 
