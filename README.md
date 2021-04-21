@@ -87,7 +87,6 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
             }
 
 * Selanjutnya kami membuat kondisi lanjutan dimana jika **fork()** mengembalikan nilai 0, artinya berhasil membuat child process.
-* Kami akan mendapatkan PID dan PPID dari child process ini menggunakan **getpid()** dan **getppid()** yang akan ditampilkan melalui output. Kami melakukan pengecekan ini untuk memastikan tidak ada terjadinya orphan process.
 * Berikutnya kami membuat argument values untuk menyimpan paramter yang digunakan untuk mengunduh file-file yang dibutuhkan dari link yang ada di array **kue[i]** dan menyimpannya dengan nama yang ada di variabel **hewan[i]**.
 * Lalu kami mengeksekusi parameter tersebut menggunakan fungsi **execv**
            
@@ -124,7 +123,6 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
         }
 
 * Jika semua proses child sudah selesai, maka selanjutnya adalah dijalankannya kembali parent process untuk melakukan pemindahan file ke folder yang telah ditentukan.
-* Terlebih dahulu kami mendapatkan PID dan PPID dari parent
 * Setelah itu kami membuat variabel array **lapres[5]** yang berisi **/.** untuk memudahkan deklarasi path untuk masuk ke dalam folder yang diinginkan.
 * Alasan dibuatnya variabel array **fisika[20]** dan **kimia[20]** adalah untuk penampungan dari variabel **matematika[i]** dan **buah[i]**. Penampungan dilakukan dengan cara mencopy string dalam **buah[i]** dan **matematika[i]** ke dalam sana.
 * Lalu kami menggabungkan variabel **lapres[5]** dengan variabel **kimia** sehingga output yang diharapkan akan seperti ini: "MUSIK/"
