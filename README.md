@@ -35,6 +35,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
 
 * Source code lengkap ada di [Soal 1](https://github.com/maulida16/soal-shift-sisop-modul-2-IT04-2021/blob/main/soal1/soal1.c)
 
+```json
         #include <sys/types.h>
         #include <sys/stat.h>
         #include <stdio.h>
@@ -46,6 +47,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
         #include <string.h>
         #include <wait.h>
         #include <time.h>
+```
 
 * Di atas merupakan library yang akan digunakan untuk menyelesaikan soal 1.
 
