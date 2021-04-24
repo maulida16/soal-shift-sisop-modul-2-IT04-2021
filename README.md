@@ -594,3 +594,11 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                     else sleep(40);
             }
         }
+        
+ #### Dokumentasi
+ 
+ ![messageImage_1618974890522](https://user-images.githubusercontent.com/73152464/115950615-86823880-a506-11eb-97de-d35c504303bc.jpg)
+ 
+ ![messageImage_1618975077774](https://user-images.githubusercontent.com/73152464/115950642-b2052300-a506-11eb-9e3e-7df7c6c6a5b4.jpg)
+ 
+ ![messageImage_1618975097927](https://user-images.githubusercontent.com/73152464/115950649-be897b80-a506-11eb-8100-3bfcc27a45b7.jpg)
