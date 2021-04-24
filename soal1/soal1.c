@@ -8,6 +8,7 @@
 #include <syslog.h>
 #include <string.h>
 #include <wait.h>
+#include <dirent.h>
 #include <time.h>
 
 pid_t pidsup, pidsup1, pidsup2, pidsup3; 
@@ -22,6 +23,7 @@ char* kue[] = {"https://drive.google.com/uc?id=1ZG8nRBRPquhYXq_sISdsVcXx5VdEgi-J
 char* hewan[] = {"Musik_for_stefany.zip","Film_for_stefany.zip", "Foto_for_stefany.zip"};
 char* buah[] = {"Musyik", "Fylm", "Pyoto"};
 char* matematika[] = {"MUSIK", "FILM", "FOTO"};
+
 
 void cobafork(int i){
 
@@ -47,7 +49,8 @@ void cobafork(int i){
             }
             else {
                 while((wait(&status)) > 0);
-                printf("parent --> pid = %d\nppid: %d\n", getpid(), getppid());
+                    // sleep(2);
+                    printf("parent --> pid = %d\nppid: %d\n", getpid(), getppid());
                     // sleep(6);
                     char orkom[20];
                     if (i == 0){
@@ -62,18 +65,19 @@ void cobafork(int i){
                         strcpy(orkom, "*.jpg");
 
                     }
-
-                    char laprak[5] = "/";
-                    char fisika[25], kimia[25];
+                    char lapres[5] = "/.", laprak[5] = "/";
+                    char fisika[20], kimia[20];
                     strcpy(kimia, matematika[i]);
-                    strcpy(fisika, buah[i]); //Musyik
-                    // strcat(kimia, laprak); //MUSIK/
+                    strcpy(fisika, buah[i]);
 
-                    // find 'coba/' -name '*.c'
-                    char *argvc[] = {"find", kimia, "-name", orkom, "-exec", "cp", fisika, "{}", "+", NULL};
+                    char *argvc[] = {"find", kimia, "-name", orkom, "-exec", "mv", "{}", fisika, ";", NULL};
 
+                    printf ("kimia: %s orkom: %s fisika: %s argcv: %s", kimia, orkom, fisika, argvc[8]);
                     printf("\n----------OTW Move----------\n");
-                    execv("usr/bin/find", argvc);
+                    // char *argvc[] = {"cp", "-r", "kimia", "fisika", NULL};
+                    execv("/usr/bin/find", argvc);
+                    // char *argvc[] = {"sh", "move.sh", NULL};
+                    // execv("/bin/bash", argvc);
             }
         }
 
@@ -174,7 +178,7 @@ int main(){
 
     while (1){
         int batas = deadline();
-        if (batas > 0 && batas == 1){
+        if (batas == 1){
             printf("----------Masuk 1----------\n");
             pidsup = fork();
 
@@ -230,7 +234,7 @@ int main(){
 
         }
 
-        if(batas > 0 && batas == 2){
+        if(batas == 2){
             printf("----------Masuk 2----------\n");
             // penutupan();
             if (penutupan() == 1) break;
