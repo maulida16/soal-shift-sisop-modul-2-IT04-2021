@@ -303,7 +303,56 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
 
 
         }
+        
+#### Revisi
 
+* Fungsi **cobafork** telah direvisi untuk mengelompokkan file yang akan dimasukkan ke dalam folder. Source code revisi selengkapnya ada di [Soal 1](https://github.com/maulida16/soal-shift-sisop-modul-2-IT04-2021/blob/main/soal1/soal1.c)
+
+            else {
+                while((wait(&status)) > 0);
+                    // sleep(2);
+                    printf("parent --> pid = %d\nppid: %d\n", getpid(), getppid());
+                    // sleep(6);
+                    char orkom[20];
+                    if (i == 0){
+                        strcpy(orkom, "*.mp3"); 
+
+                    }
+                    else if (i == 1){
+                        strcpy(orkom, "*.mp4");
+
+                    }
+                    else{       
+                        strcpy(orkom, "*.jpg");
+
+                    }
+                    char lapres[5] = "/.", laprak[5] = "/";
+                    char fisika[20], kimia[20];
+                    strcpy(kimia, matematika[i]);  //matematika[] = {"MUSIK", "FILM", "FOTO"};
+                    strcpy(fisika, buah[i]); //buah[] = {"Musyik", "Fylm", "Pyoto"};
+
+                    char *argvc[] = {"find", kimia, "-name", orkom, "-exec", "mv", "{}", fisika, ";", NULL};
+
+                    printf ("kimia: %s orkom: %s fisika: %s argcv: %s", kimia, orkom, fisika, argvc[8]);
+                    printf("\n----------OTW Move----------\n");
+                    // char *argvc[] = {"cp", "-r", "kimia", "fisika", NULL};
+                    execv("/usr/bin/find", argvc);
+                    // char *argvc[] = {"sh", "move.sh", NULL};
+                    // execv("/bin/bash", argvc);
+            }
+        }
+
+* Pada bagian ini, kami membuat beberapa kondisi untuk file yang akan dimasukkan ke dalam folder. 
+* Kami membuat variabel array **orkom** yang akan menyimpan regular expression yang menyimpang sembarang string berupa tanda bintang dan tipe filenya.
+* Tipe file ditentukan berdasarkan ketentuan berikut: Jika nilai indeks dari array adalah 0 maka akan mengambil semua file yang bertipe mp3. Jika nilai indeks array adalah 1, maka akan diambil semua file bertipe mp4. Jika indeks array bernilai 2, maka diambil semua file bertipe jpg.
+* Lalu value dari array **matematika[i]** dan **buah[i]** dimasukkan ke dalam array kimia dan fisika.
+* Setelah itu kami mengambil beberapa parameter yang digunakan untuk mengeksekusi program. ```"find", kimia,``` akan mencari dan me-list semua file yang ada di folder dengan nama string yang ada di array **kimia**.
+* ```"-name", orkom,``` berfungsi untuk mencari nama-nama file dan folder yang telah memenuhi syarat dari tipe file di atas dari folder-folder dalam **kimia**.
+* ```"-exec", "mv", "{}", fisika, ";", NULL``` **mv** dilakukan untuk memindahkan semua file yang telah di filter tadi dari yang nama dan tipe filenya sudah disimpan dalam **{}** di pindah ke folder yang namanya tercatat dalam string pada variabel array **fisika** sesuai dengan nilai indeksnya. Setelah itu perintah eksekusi diakhiri dengan tanda **;**.
+
+#### Kendala
+* Awalnya kami hanya memindah semua tipe file foto ke dalam folder tidak hanya file jpg.
+* Saat mencoba loop fork, hasilnya tidak sesuai yang diinginkan. Ternyata setelah mencari beberapa sumber referensi, loop dan fork tidak disarankan.
 
 ### Soal 2
 
@@ -329,6 +378,95 @@ Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang ber
 
 ### Penyelesaian
 
+* Source code lengkap ada di [Soal 2](https://github.com/maulida16/soal-shift-sisop-modul-2-IT04-2021/blob/main/soal2/soal2.c)
+
+        #include <stdlib.h>
+        #include <sys/types.h>
+        #include <sys/wait.h>
+        #include <unistd.h>
+        #include <stdio.h>
+        #include <time.h>
+        #include <string.h>
+        #include <dirent.h>
+
+* Di atas merupakan library yang digunakan untuk menjalankan program di soal 2.
+
+        void listFilesRecursively(char *basePath)
+        {
+            char path[1000];
+            struct dirent *dp;
+            DIR *dir = opendir(basePath);
+
+* Kami menggunakan library dirent.h yang dapat mempermudah kami untuk membuka directory stream. 
+* **DIR** adalah data type yang merepresentasikan directory stream. 
+* **opendir** akan membuka directory stream dan membaca directory yang namanya ada di **dirname**/path
+
+            if (!dir)
+                return;
+                
+* Jika fungsi **dir** ini gagal dijalankan, dia akan mengembalikan nilai pointer null.
+
+            while ((dp = readdir(dir)) != NULL)
+            {
+                if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)
+                {
+                    char baru[255] = "";
+                    strcpy(baru, dp->d_name);
+                    strtok(baru, ";_");
+                    char asalFile[255] = "/home/gerry/modul2/petshop/";
+                    strcat(asalFile, baru);
+                }
+            }
+            closedir(dir);
+        }
+
+* ```if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)``` 
+
+
+
+        int main()
+        {
+            pid_t pid1, pid2;
+            int status;
+
+            char text[100] = {"/home/gerry/modul2/petshop"};
+
+             pid1 = fork();
+             if (pid1 == 0)
+             {
+                char *arg[]={"unzip", "/home/gerry/Downloads/pets.zip", "-d", text, NULL};
+                execv("/usr/bin/unzip",arg);
+                sleep(2);
+             }
+             
+* Di awal fungsi main, kami mendeklarasikan path dari folder **petshop** terlebih dahulu untuk memudahkan proses unzip yang dilakukan pada proses child.
+* Setelah itu kami membuat parameter untuk  unzip file **pets.zip** ke dalam folder **petshop**
+
+             else
+             {
+                pid2 = fork();
+                if (pid2 == 0)
+                {
+                   char *argc[]={"mkdir", "-p", text, NULL};
+                   execv("/usr/bin/mkdir",argc);
+                }
+                else
+                {
+                   while ((wait(&status) > 0));
+                   char *arga[]={"rm", "-r", "petshop/apex_cheats", "petshop/musics", "petshop/unimportant_files", NULL};
+                   execv("/usr/bin/rm",arga);
+                }
+             }
+            char path[255] = {"/home/gerry/modul2/petshop"};
+            listFilesRecursively(path);
+
+        }
+
+* Setelah itu ketika child proses sudah selesai, 
+
+#### Kendala
+* Belum memahami fungsi **strtok** sehingga penyelesaian soal belum dituntaskan hingga deadline.
+* 
 
 ## Soal 3
 
@@ -593,6 +731,10 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                     else sleep(40);
             }
         }
+        
+ 
+ #### Kendala
+ * 
         
  #### Dokumentasi
  
