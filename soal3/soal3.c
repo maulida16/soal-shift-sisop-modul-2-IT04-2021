@@ -55,9 +55,11 @@ void generateKiller(char source[], int sid){
   	//coba dimodif pake case
     if (strcmp(source, "-z") == 0)
         //sid yang diterima dan pid nilainya sama, bisa pakai yang mana saja
+        // kill -9 -SID daemon/PID si parent, negatif soalnya nanti kill semua program yang satu parent (sampe ke akar dan cabang2nya)
         fprintf(target, "#!/bin/bash\nkill -9 -%d\nrm killer.sh\nSID: %d PPID: %d", sid, sid, (int)getpid());
 		//mode 2 (-x)
     if (strcmp(source, "-x") == 0)
+        //kill sid dari daemonnya aja, nanti childnya masih dibiarin jalan, klo selesai nanti mati sendiri
         fprintf(target, "#!/bin/bash\nkill %d\nrm killer.sh", sid);
 		
   	//kalau di child
