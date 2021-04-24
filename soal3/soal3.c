@@ -53,10 +53,11 @@ void generateKiller(char source[], int sid){
 		
   	//mode 1 (-z)
   	//coba dimodif pake case
-    if (strcmp(source, "-x") == 0)
-        fprintf(target, "#!/bin/bash\npkill -9 soal3github\nrm killer.sh");
-		//mode 2 (-x)
     if (strcmp(source, "-z") == 0)
+        //sid yang diterima dan pid nilainya sama, bisa pakai yang mana saja
+        fprintf(target, "#!/bin/bash\nkill -9 -%d\nrm killer.sh\nSID: %d PPID: %d", sid, sid, (int)getpid());
+		//mode 2 (-x)
+    if (strcmp(source, "-x") == 0)
         fprintf(target, "#!/bin/bash\nkill %d\nrm killer.sh", sid);
 		
   	//kalau di child
@@ -121,6 +122,8 @@ int main(int argc, char **argv){
 
     time_t timer;
     struct tm* tm_info;
+    int a = 0;
+    printf("%d. PID: %d PPID: %d SID:%d\n", a, (int)getpid(), (int)getppid(), (int)setsid());
 
   //while untuk membuat folder dan zip
         while (1) {
@@ -128,14 +131,12 @@ int main(int argc, char **argv){
             tm_info = localtime(&timer);
 
             char folder_name[100];
-            //formatnya beda, jangan luapa diganti
             strftime(folder_name, 100, "%Y-%m-%d_%H:%M:%S", tm_info);
 
             //bikin var pid buat child, jalanin fork()
             pid_t child_id;
             child_id = fork();
 
-            //nggak tau buat apa
             int status;
 
             //exit klo gagal
@@ -146,6 +147,7 @@ int main(int argc, char **argv){
             if (child_id == 0){ 
                 //klo di dalem child (fork() == 0)
                 if (fork() == 0){
+                    
                     //buat folder namanya sesuai yang diatur di folder_name
                     char *argv[] = {"mkdir", "-p", folder_name, NULL};
                     printf("mkdir\n");
@@ -155,6 +157,7 @@ int main(int argc, char **argv){
                 else {
                     //tunggu childnya mati/exit
                     while ((wait(&status)) > 0);
+                    printf("%d. PID: %d PPID: %d\n", a, (int)getpid(), (int)getppid());
                     //loop buat donwload sebanyak 10 gambar
                     for (int i = 0; i < 10; i++){
                         //klo di dalem child
@@ -163,7 +166,7 @@ int main(int argc, char **argv){
                             chdir(folder_name);
                             //bikin var buat timer
                             time_t file_timer;
-                            //iki lapo mbuh
+                            
                             struct tm* file_tm_info;
 
                             file_timer = time(NULL);
@@ -181,8 +184,8 @@ int main(int argc, char **argv){
                             //set nama filenya
                             strftime(file_name, 100, "%Y-%m-%d_%H:%M:%S", file_tm_info);
                             //download filenya
-                            char *argv[] = {"wget", url, "-qO", file_name, NULL};
-                            printf("wget\n");
+                            char *argv[] = {"wget", url, "-q", "-O", file_name, NULL};
+                            // printf("wget--%d\n", i);
                             execv("/usr/bin/wget", argv);
                         }
 
@@ -199,6 +202,9 @@ int main(int argc, char **argv){
                     execv("/usr/bin/zip", argv);
                 }
             }
-            else sleep(40);
+            else {
+              // a++;
+              sleep(40);
+              };
     }
 }
