@@ -47,21 +47,33 @@ void cobafork(int i){
             }
             else {
                 while((wait(&status)) > 0);
-                    // sleep(2);
-                    printf("parent --> pid = %d\nppid: %d\n", getpid(), getppid());
+                printf("parent --> pid = %d\nppid: %d\n", getpid(), getppid());
                     // sleep(6);
-                    char lapres[5] = "/.", laprak[5] = "/";
-                    char fisika[20], kimia[20];
+                    char orkom[20];
+                    if (i == 0){
+                        strcpy(orkom, "*.mp3"); 
+
+                    }
+                    else if (i == 1){
+                        strcpy(orkom, "*.mp4");
+
+                    }
+                    else{       
+                        strcpy(orkom, "*.jpg");
+
+                    }
+
+                    char laprak[5] = "/";
+                    char fisika[25], kimia[25];
                     strcpy(kimia, matematika[i]);
-                    strcpy(fisika, buah[i]);
-                    strcat(kimia, lapres); //MUSIK/*
-                    // strcat(fisika, laprak); //Musyik/*
-                    // cobagenerate(kimia, fisika, hewan[i]);
-                    char *argvc[] = {"cp", "-r", kimia, fisika, NULL};
+                    strcpy(fisika, buah[i]); //Musyik
+                    // strcat(kimia, laprak); //MUSIK/
+
+                    // find 'coba/' -name '*.c'
+                    char *argvc[] = {"find", kimia, "-name", orkom, "-exec", "cp", fisika, "{}", "+", NULL};
+
                     printf("\n----------OTW Move----------\n");
-                    execv("/bin/cp", argvc);
-                    // char *argvc[] = {"sh", "move.sh", NULL};
-                    // execv("/bin/bash", argvc);
+                    execv("usr/bin/find", argvc);
             }
         }
 

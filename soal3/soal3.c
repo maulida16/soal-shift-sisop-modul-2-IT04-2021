@@ -12,37 +12,40 @@
 
 char sandi[100];
 
-void itik(char message[100], int key){
+void itik(int key){
    
+    char message[100] = "Download Success";
     char encrypted[100], symbol;
 
     for(int i = 0; message[i] != '\0'; ++i){
-    symbol = message[i];
-
-    if(symbol >= 'a' && symbol <= 'z'){
-        symbol = symbol + key;
-
-        if(symbol > 'z'){
-            symbol = symbol - 'z' + 'a' - 1;
+          symbol = message[i];
+          
+          if(symbol >= 'a' && symbol <= 'z'){
+            symbol = symbol + key;
+            
+            if(symbol > 'z'){
+              symbol = symbol - 'z' + 'a' - 1;
+            }
+            
+            message[i] = symbol;
+          }
+          else if(symbol >= 'A' && symbol <= 'Z'){
+            symbol = symbol + key;
+            
+            if(symbol > 'Z'){
+              symbol = symbol - 'Z' + 'A' - 1;
+            }
+            
+            message[i] = symbol;
+          }
         }
-
-        encrypted[i] = symbol;
-    }
-    else if(symbol >= 'A' && symbol <= 'Z'){
-        symbol = symbol + key;
-
-        if(symbol > 'Z'){
-            symbol = symbol - 'Z' + 'A' - 1;
-        }
-
-        encrypted[i] = symbol;
-    }
-  }
-  strcpy(sandi, encrypted);
-  printf("%s", sandi);
+    
+  strcpy(sandi, message);
+  printf("sandi: ");
+  printf("%s-> %s\n", message, sandi);
 }
 
-void generateKiller(char source[]){
+void generateKiller(char source[], int sid){
     FILE *target;
   	//buka/jalankan file killer.sh
     target = fopen("killer.sh", "w");
@@ -50,11 +53,11 @@ void generateKiller(char source[]){
 		
   	//mode 1 (-z)
   	//coba dimodif pake case
-    if (strcmp(source, "-z") == 0)
-        fprintf(target, "#!/bin/bash\npkill -9 soal3\nrm killer.sh");
-		//mode 2 (-x)
     if (strcmp(source, "-x") == 0)
-        fprintf(target, "#!/bin/bash\npkill soal3\nrm killer.sh");
+        fprintf(target, "#!/bin/bash\npkill -9 soal3github\nrm killer.sh");
+		//mode 2 (-x)
+    if (strcmp(source, "-z") == 0)
+        fprintf(target, "#!/bin/bash\nkill %d\nrm killer.sh", sid);
 		
   	//kalau di child
     if(fork() == 0){
@@ -77,8 +80,8 @@ void generate_statustxt(char folder_local[]){
     status_txt = fopen(statuxt, "w");
 
     char puyuh[100] = "Download Success";
-    itik(puyuh, 5);
-
+    itik(5);
+    printf("statuxt\n");
     fprintf(status_txt, "%s", sandi);
 
     //set nama file zip
@@ -93,27 +96,28 @@ int main(int argc, char **argv){
         exit(EXIT_FAILURE);
     }
 
-    generateKiller(argv[1]);
 
-    pid_t pid, sid;
+    // pid_t pid, sid;
 
-    pid = fork();
+    // pid = fork();
 
-    if (pid < 0)
-        exit(EXIT_FAILURE);
+    // if (pid < 0)
+    //     exit(EXIT_FAILURE);
 
-    if (pid > 0)
-        exit(EXIT_SUCCESS);
+    // if (pid > 0)
+    //     exit(EXIT_SUCCESS);
 
-    umask(0);
+    // umask(0);
 
-    sid = setsid();
-    if (sid < 0) 
-        exit(EXIT_FAILURE);
+    // sid = setsid();
+    // if (sid < 0) 
+    //     exit(EXIT_FAILURE);
+    
+    // generateKiller(argv[1], sid);
 
-    close(STDIN_FILENO);
-    close(STDOUT_FILENO);
-    close(STDERR_FILENO);
+    // close(STDIN_FILENO);
+    // close(STDOUT_FILENO);
+    // close(STDERR_FILENO);
 
     time_t timer;
     struct tm* tm_info;
@@ -144,6 +148,7 @@ int main(int argc, char **argv){
                 if (fork() == 0){
                     //buat folder namanya sesuai yang diatur di folder_name
                     char *argv[] = {"mkdir", "-p", folder_name, NULL};
+                    printf("mkdir\n");
                     execv("/bin/mkdir", argv);
                 }
                 //klo nggak di dalem child
@@ -166,7 +171,7 @@ int main(int argc, char **argv){
 
                             //t = waktu epoch
                             int t = (int)time(NULL);
-                            t = (t % 1000) + 100;
+                            t = (t % 1000) + 50;
 
                             char url[100];
                             //url buat donwload gambar persegi txt
@@ -177,6 +182,7 @@ int main(int argc, char **argv){
                             strftime(file_name, 100, "%Y-%m-%d_%H:%M:%S", file_tm_info);
                             //download filenya
                             char *argv[] = {"wget", url, "-qO", file_name, NULL};
+                            printf("wget\n");
                             execv("/usr/bin/wget", argv);
                         }
 
@@ -189,6 +195,7 @@ int main(int argc, char **argv){
                     sprintf(folder_name_zip, "%s.zip", folder_name);
                     //bikin file zip (compress) namanya sesuai yang udah di set
                     char *argv[] = {"zip", "-qrm", folder_name_zip, folder_name, NULL};
+                    printf("zip\n");
                     execv("/usr/bin/zip", argv);
                 }
             }
