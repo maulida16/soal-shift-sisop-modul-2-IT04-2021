@@ -304,7 +304,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
 
         }
         
-#### Revisi
+### Revisi
 
 * Fungsi **cobafork** telah direvisi untuk mengelompokkan file yang akan dimasukkan ke dalam folder. Source code revisi selengkapnya ada di [Soal 1](https://github.com/maulida16/soal-shift-sisop-modul-2-IT04-2021/blob/main/soal1/soal1.c)
 
@@ -343,14 +343,14 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
         }
 
 * Pada bagian ini, kami membuat beberapa kondisi untuk file yang akan dimasukkan ke dalam folder. 
-* Kami membuat variabel array **orkom** yang akan menyimpan regular expression yang menyimpang sembarang string berupa tanda bintang dan tipe filenya.
+* Kami membuat variabel array **orkom** yang akan menyimpan regular expression yang menyimpan sembarang string berupa tanda bintang dan tipe filenya.
 * Tipe file ditentukan berdasarkan ketentuan berikut: Jika nilai indeks dari array adalah 0 maka akan mengambil semua file yang bertipe mp3. Jika nilai indeks array adalah 1, maka akan diambil semua file bertipe mp4. Jika indeks array bernilai 2, maka diambil semua file bertipe jpg.
 * Lalu value dari array **matematika[i]** dan **buah[i]** dimasukkan ke dalam array kimia dan fisika.
 * Setelah itu kami mengambil beberapa parameter yang digunakan untuk mengeksekusi program. ```"find", kimia,``` akan mencari dan me-list semua file yang ada di folder dengan nama string yang ada di array **kimia**.
 * ```"-name", orkom,``` berfungsi untuk mencari nama-nama file dan folder yang telah memenuhi syarat dari tipe file di atas dari folder-folder dalam **kimia**.
 * ```"-exec", "mv", "{}", fisika, ";", NULL``` **mv** dilakukan untuk memindahkan semua file yang telah di filter tadi dari yang nama dan tipe filenya sudah disimpan dalam **{}** di pindah ke folder yang namanya tercatat dalam string pada variabel array **fisika** sesuai dengan nilai indeksnya. Setelah itu perintah eksekusi diakhiri dengan tanda **;**.
 
-#### Kendala
+### Kendala
 * Awalnya kami hanya memindah semua tipe file foto ke dalam folder tidak hanya file jpg.
 * Saat mencoba loop fork, hasilnya tidak sesuai yang diinginkan. Ternyata setelah mencari beberapa sumber referensi, loop dan fork tidak disarankan.
 
@@ -464,7 +464,7 @@ Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang ber
 
 * Setelah itu ketika child proses sudah selesai, 
 
-#### Kendala
+### Kendala
 * Belum memahami fungsi **strtok** sehingga penyelesaian soal belum dituntaskan hingga deadline.
 * 
 
@@ -732,11 +732,78 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
             }
         }
         
+ ### Revisi
+ * Pertama, kami merevisi fungsi Caesar Chipper kami yang sebelumnya hanya mengenkripsi kata "Download" saja.
  
- #### Kendala
+         void itik(int key){
+
+            char message[100] = "Download Success";
+            char encrypted[100], symbol;
+
+            for(int i = 0; message[i] != '\0'; ++i){
+                  symbol = message[i];
+
+                  if(symbol >= 'a' && symbol <= 'z'){
+                    symbol = symbol + key;
+
+                    if(symbol > 'z'){
+                      symbol = symbol - 'z' + 'a' - 1;
+                    }
+
+                    message[i] = symbol;
+                  }
+                  else if(symbol >= 'A' && symbol <= 'Z'){
+                    symbol = symbol + key;
+
+                    if(symbol > 'Z'){
+                      symbol = symbol - 'Z' + 'A' - 1;
+                    }
+
+                    message[i] = symbol;
+                  }
+                }
+
+          strcpy(sandi, message);
+          printf("sandi: ");
+          printf("%s-> %s\n", message, sandi);
+        }
+ 
+ * **message[100]** tidak lagi menjadi parameter namun langsung kami deklarasikan isinya. Akibat perubahan ini maka string yang di copy ke dalam variabel **sandi** adalah string dari **message** bukan dari tempat penampungan lainnya.
+ * Untuk fungsi caesar chippernya kurang lebih sama dengan sebelum direvisi.
+ 
+ * Kedua, Kami merevisi fungsi dari **generateKiller**
+ 
+         void generateKiller(char source[], int sid){
+            FILE *target;
+                //buka/jalankan file killer.sh
+            target = fopen("killer.sh", "w");
+            int status;
+
+                //mode 1 (-z)
+                //coba dimodif pake case
+            if (strcmp(source, "-z") == 0)
+                //sid yang diterima dan pid nilainya sama, bisa pakai yang mana saja
+                // kill -9 -SID daemon/PID si parent, negatif soalnya nanti kill semua program yang satu parent (sampe ke akar dan cabang2nya)
+                fprintf(target, "#!/bin/bash\nkill -9 -%d\nrm killer.sh\nSID: %d PPID: %d", sid, sid, (int)getpid());
+                        //mode 2 (-x)
+            if (strcmp(source, "-x") == 0)
+                //kill sid dari daemonnya aja, nanti childnya masih dibiarin jalan, klo selesai nanti mati sendiri
+                fprintf(target, "#!/bin/bash\nkill %d\nrm killer.sh", sid);
+
+                //kalau di child
+            if(fork() == 0){
+              //set permission baut file killer biar 
+              char *argv[] = {"chmod", "u+x", "killer.sh", NULL};
+              execv("/bin/chmod", argv);
+            }
+            //tutup program/file killeh.sh yang tadi dijalanin
+            fclose(target);
+        }
+        
+ ### Kendala
  * 
         
- #### Dokumentasi
+ ### Dokumentasi
  
  ![messageImage_1618974890522](https://user-images.githubusercontent.com/73152464/115950615-86823880-a506-11eb-97de-d35c504303bc.jpg)
  
