@@ -56,7 +56,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
         pid_t pidv0, pidv1, pidv2, pidv3;
         int status, mantab, jiwa;
         
-* Pada pendeklarasian variabel, kami mendeklarasikan banyak variabel dengan tipe data pid_t untuk mendapatkan proses ID karena banyaknya fungsi yang berjalan di latar belakang nantinya.
+* Pada pendeklarasian variabel, kami mendeklarasikan banyak variabel dengan tipe data pid_t untuk mendapatkan proses ID. Kami melakukan hal ini untuk menghindari terjadinya duplikasi fungsi fork() karena banyaknya fungsi yang akan berjalan di latar belakang nantinya.
 
         char* kue[] = {"https://drive.google.com/uc?id=1ZG8nRBRPquhYXq_sISdsVcXx5VdEgi-J&export=download", 
                     "https://drive.google.com/uc?id=1ktjGgDkL0nNpY-vT7rT7O6ZI47Ke9xcp&export=download",
@@ -79,7 +79,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
             if (pid0 < 0)
             exit(EXIT_FAILURE);
 
-* Kami membuat fungsi bernama **cobafork** dengan parameter integer untuk mengakses value array. Fungsi ini yang akan digunakan untuk proses pengunduhan file hingga memindahkan semua hasil download ke folder yang ditentukan.
+* Kami membuat fungsi bernama **cobafork** dengan parameter integer untuk mengakses value array nantinya. Fungsi ini yang akan digunakan untuk proses pengunduhan file hingga memindahkan semua hasil download ke folder yang ditentukan.
 * Jika **fork()** dari proses spawning mengembalikan nilai negatif, maka program tidak akan berjalan.
 
             if (pid0 == 0) {
@@ -102,7 +102,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
                     execv("/usr/bin/unzip", argvb);
                 }
                 
-* Dibuat kondisi lagi jika fork() mengembalikan nilai positif yang artinya proses sudah kembali lagi ke parent.
+* Kondisi else ini menandakan bahwa fork() mengembalikan nilai positif yang artinya proses sudah kembali lagi ke parent.
 * Perulangan **while** dibuat dengan kondisi untuk memastikan bahwa proses child telah berhenti, lalu memanggil fungsi **fork()** lagi untuk menjalankan proses unzip.
 
                 else {
@@ -124,11 +124,10 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
         return;
         }
 
-* Jika semua proses child sudah selesai, maka selanjutnya adalah dijalankannya kembali parent process untuk melakukan pemindahan file ke folder yang telah ditentukan.
+* Jika semua proses unzip sudah selesai, maka selanjutnya adalah dijalankannya kembali parent process untuk melakukan pemindahan file ke folder yang telah ditentukan.
 * Setelah itu kami membuat variabel array **lapres[5]** yang berisi **/.** untuk memudahkan deklarasi path untuk masuk ke dalam folder yang diinginkan.
 * Alasan dibuatnya variabel array **fisika[20]** dan **kimia[20]** adalah untuk penampungan dari variabel **matematika[i]** dan **buah[i]**. Penampungan dilakukan dengan cara mencopy string dalam **buah[i]** dan **matematika[i]** ke dalam sana.
-* Lalu kami menggabungkan variabel **lapres[5]** dengan variabel **kimia** sehingga output yang diharapkan akan seperti ini: "MUSIK/"
-* Dilanjutkan dengan pembuatan parameter untuk memindahkan semua isi array **fisika** ke array **kimia** sehingga output yang diharapkan menjadi: "MUSIK/Musyik"
+* Berikutnya kami menggunakan parameter "cp" untuk mencopy semua isi dari variabel kimia ke fisika.
 
         int penutupan(){
 
@@ -153,7 +152,7 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
         }
 
 * Selanjutnya kami membuat fungsi **penutupan**. 
-* Di fungsi ini proses child akan me-zip folder yang ada di array **buah[i]** ke dalam **Lopyu_Stevany.zip**.
+* Di fungsi ini proses child akan me-zip semua folder yang ada di array **buah[i]** menjadi **Lopyu_Stevany.zip**.
 * Saat proses kembali ke parent, dilakukan penghapusan folder-folder yang ada di array **buah[]** dan **matematika[]**.
 
         int deadline(){
