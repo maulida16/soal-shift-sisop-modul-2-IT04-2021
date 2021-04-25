@@ -354,6 +354,10 @@ Kemudian Steven meminta bantuanmu yang memang sudah jago sisop untuk membantunya
 * Awalnya kami hanya memindah semua tipe file foto ke dalam folder tidak hanya file jpg.
 * Saat mencoba loop fork, hasilnya tidak sesuai yang diinginkan. Ternyata setelah mencari beberapa sumber referensi, loop dan fork tidak disarankan.
 
+### Dokumentasi
+![hahahahahha](https://user-images.githubusercontent.com/73152464/115996128-3db2a880-a608-11eb-8440-fe3a9d637b2c.jpg)
+![hahahhahahahah2](https://user-images.githubusercontent.com/73152464/115996278-dba67300-a608-11eb-8a9d-08e99b6d22c2.jpg)
+
 ### Soal 2
 
 Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang berisi banyak sekali foto peliharaan dan Ia diperintahkan untuk mengkategorikan foto-foto peliharaan tersebut. Loba merasa kesusahan melakukan pekerjaanya secara manual, apalagi ada kemungkinan ia akan diperintahkan untuk melakukan hal yang sama. Kamu adalah teman baik Loba dan Ia meminta bantuanmu untuk membantu pekerjaannya.
@@ -968,14 +972,14 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
  * Lalu pada mode -x digunakan perintah `fprintf(target, "#!/bin/bash\nkill %d\nrm killer.sh", sid);` perintah ini hanya mengeksekusi SID dari Daemon process saja, sehingga child proses masih bisa berjalan namun akan ditunggu hingga selesai.
  
  * Revisi selanjutnya adalah pada pendeklarasian ukuran gambar, sebelumnya `t = (t % 1000) + 100;` menjadi `t = (t % 1000) + 50;`
- 
- ### Kendala
- * 
         
  ### Dokumentasi
+Dengan mode -z
+![messageImage_1619360495752](https://user-images.githubusercontent.com/73152464/115997154-558c2b80-a60c-11eb-848c-e63d9434b1d3.jpg)
+![messageImage_1619360919316](https://user-images.githubusercontent.com/73152464/115997422-4063cc80-a60d-11eb-8dc3-7569c0d27793.jpg)
  
- ![messageImage_1618974890522](https://user-images.githubusercontent.com/73152464/115950615-86823880-a506-11eb-97de-d35c504303bc.jpg)
+Dengan mode -x
+![messageImage_1619360692887](https://user-images.githubusercontent.com/73152464/115997272-c92e3880-a60c-11eb-84d0-74fc3db9040c.jpg)
+![messageImage_1619360784191](https://user-images.githubusercontent.com/73152464/115997363-0692c600-a60d-11eb-8af9-5d4cc9e55e7a.jpg)
+![messageImage_1619360816840](https://user-images.githubusercontent.com/73152464/115997390-23c79480-a60d-11eb-9a80-22ffb96007b3.jpg)
  
- ![messageImage_1618975077774](https://user-images.githubusercontent.com/73152464/115950642-b2052300-a506-11eb-9e3e-7df7c6c6a5b4.jpg)
- 
- ![messageImage_1618975097927](https://user-images.githubusercontent.com/73152464/115950649-be897b80-a506-11eb-8100-3bfcc27a45b7.jpg)
