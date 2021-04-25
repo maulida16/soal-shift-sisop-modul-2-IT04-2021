@@ -733,6 +733,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
         }
         
  ### Revisi
+ 
  * Pertama, kami merevisi fungsi Caesar Chipper kami yang sebelumnya hanya mengenkripsi kata "Download" saja.
  
          void itik(int key){
@@ -771,13 +772,7 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
  * **message[100]** tidak lagi menjadi parameter namun langsung kami deklarasikan isinya. Akibat perubahan ini maka string yang di copy ke dalam variabel **sandi** adalah string dari **message** bukan dari tempat penampungan lainnya.
  * Untuk fungsi caesar chippernya kurang lebih sama dengan sebelum direvisi.
  
- * Kedua, Kami merevisi fungsi dari **generateKiller**
- 
-         void generateKiller(char source[], int sid){
-            FILE *target;
-                //buka/jalankan file killer.sh
-            target = fopen("killer.sh", "w");
-            int status;
+ * Kedua, Kami merevisi fungsi dari **generateKiller**. Sebelumnya kami mengalami kegagalan program killer.sh saat menjalankan mode -z.
 
                 //mode 1 (-z)
                 //coba dimodif pake case
@@ -790,16 +785,12 @@ Ranora meminta bantuanmu untuk membantunya dalam membuat program tersebut. Karen
                 //kill sid dari daemonnya aja, nanti childnya masih dibiarin jalan, klo selesai nanti mati sendiri
                 fprintf(target, "#!/bin/bash\nkill %d\nrm killer.sh", sid);
 
-                //kalau di child
-            if(fork() == 0){
-              //set permission baut file killer biar 
-              char *argv[] = {"chmod", "u+x", "killer.sh", NULL};
-              execv("/bin/chmod", argv);
-            }
-            //tutup program/file killeh.sh yang tadi dijalanin
-            fclose(target);
-        }
-        
+ * Pada revisi kali ini, kami menulis perintah `fprintf(target, "#!/bin/bash\nkill -9 -%d\nrm killer.sh\nSID: %d PPID: %d", sid, sid, (int)getpid());` pada mode -z.
+ * Fungsi ini dapat me-kill semua program dari SID atau PPID yang telah didapatkan dengan **getpid()**, dan akan mematikan semua program yang satu parent.
+ * Lalu pada mode -x digunakan perintah `fprintf(target, "#!/bin/bash\nkill %d\nrm killer.sh", sid);` perintah ini hanya mengeksekusi SID dari Daemon process saja, sehingga child proses masih bisa berjalan namun akan ditunggu hingga selesai.
+ 
+ * Revisi selanjutnya adalah pada pendeklarasian ukuran gambar, sebelumnya `t = (t % 1000) + 100;` menjadi `t = (t % 1000) + 50;`
+ 
  ### Kendala
  * 
         
