@@ -389,22 +389,14 @@ Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang ber
         #include <string.h>
         #include <dirent.h>
 
-* Di atas merupakan library yang digunakan untuk menjalankan program di soal 2.
-
         void listFilesRecursively(char *basePath)
         {
             char path[1000];
             struct dirent *dp;
             DIR *dir = opendir(basePath);
 
-* Kami menggunakan library dirent.h yang dapat mempermudah kami untuk membuka directory stream. 
-* **DIR** adalah data type yang merepresentasikan directory stream. 
-* **opendir** akan membuka directory stream dan membaca directory yang namanya ada di **dirname**/path
-
             if (!dir)
                 return;
-                
-* Jika fungsi **dir** ini gagal dijalankan, dia akan mengembalikan nilai pointer null.
 
             while ((dp = readdir(dir)) != NULL)
             {
@@ -419,9 +411,6 @@ Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang ber
             }
             closedir(dir);
         }
-
-* ```if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)``` 
-
 
 
         int main()
@@ -439,9 +428,6 @@ Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang ber
                 sleep(2);
              }
              
-* Di awal fungsi main, kami mendeklarasikan path dari folder **petshop** terlebih dahulu untuk memudahkan proses unzip yang dilakukan pada proses child.
-* Setelah itu kami membuat parameter untuk  unzip file **pets.zip** ke dalam folder **petshop**
-
              else
              {
                 pid2 = fork();
@@ -462,11 +448,203 @@ Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang ber
 
         }
 
-* Setelah itu ketika child proses sudah selesai, 
+### Revisi
+
+Karena pada soal 2 ini kami belum menuntaskan seluruh perintah soal, maka kami selesaikan pada revisi berikut. 
+  
+    #include <stdlib.h>
+    #include <sys/stat.h>
+    #include <sys/types.h>
+    #include <sys/wait.h>
+    #include <unistd.h>
+    #include <stdio.h>
+    #include <string.h>
+    #include <dirent.h>
+
+* Di atas merupakan library yang digunakan untuk menjalankan soal no. 2.
+
+      //fungsi membuat folder sesuai kategori hewan
+      void folder(char *nama)
+      {
+          char target[40];
+          sprintf(target, "%s", nama);
+
+          DIR *folder = opendir(nama);
+          if(folder){
+              return;
+          }
+
+          pid_t pid;
+          pid = fork();
+          if(pid == 0){
+              char *argv[] = {"mkdir", target, NULL};
+              execv("/usr/bin/mkdir", argv);
+              exit(EXIT_SUCCESS);
+          }
+          while(wait(NULL) != pid);
+      }
+
+* Pertama dibuat fungsi bernama **folder** yang digunakan untuk membuat folder sesuai kategori hewan dan menggunakan parameter string untuk nama foldernya. Parameter tadi yang selanjutnya akan disimpan pada variabel array `target`
+* Selanjutnya pointer **folder** akan membuka path direktori ke parameter nama folder tadi. Fungsi ini dianggap berhasil jika berhasil mengembalikan nilai pointer ke DIR.
+* `char *argv[] = {"mkdir", target, NULL};` digunakan untuk membuat folder baru dengan nama yang sudah diinputkan di awal.
+
+      //fungsi copy gambar hewan ke folder sesuai kategori
+      void copy(char *folder, char *asal, char *tujuan)
+      {
+          char source[30];
+          sprintf(source, "%s", asal);
+
+          char destination[40];
+          sprintf(destination, "%s/%s.jpg", folder, tujuan);
+
+          pid_t pid;
+          pid = fork();
+          if(pid == 0){
+              char *argv[] = {"cp", source, destination, NULL};
+              execv("/usr/bin/cp", argv);
+              exit(EXIT_SUCCESS);
+          }
+          while(wait(NULL) != pid);
+      }
+      
+* Berikutnya dibuat fungsi bernama **copy** yang berfungsi untuk me-copy gambar-gambar hewan ke folder sesuai kategori dari hewan tersebut.
+* Fungsi ini membutuhkan tiga parameter, yaitu **folder** yang merupakan nama folder kategori hewan, lalu ada **asal** yang merupakan asal folder tempat file itu berasal, dan yang terakhir ada **tujuan** yang merupakan nama file yang akan dipindah.
+* Setelah semua parameter disimpan dalam array, kemudian di eksekusi perintah "cp" yang akan memindahkan file dari **asal** ke **destination** yang merupakan path direktori baru tempat file akan diletakkan.
+
+
+      //fungsi membuat file keterangan yang berisi nama dan umur hewan
+      void keterangan(char *folder, char *nama_hewan, char *umur_hewan)
+      {
+          char ket[50];
+          sprintf(ket, "%s/keterangan.txt", folder);
+
+          pid_t pid;
+          pid = fork();
+
+          if(pid == 0){
+              FILE *txt;
+              txt = fopen(ket, "a");
+              fprintf(txt, "nama: %s\numur: %s tahun\n\n", nama_hewan, umur_hewan);
+              fclose(txt);
+              exit(EXIT_SUCCESS);
+          }
+          while(wait(NULL) != pid);
+      }
+
+* Selanjutnya dibuat sebuah funsi bernama **keterangan** yang akan membuat file keterangan berisi nama dan umur semua hewan yang ada dalam sebuah folder.
+* Pertama-tama adalah dibuatnya sebuah file **keterangan.txt** di dalam folder kategori. Kemudian nama hewan dan umur hean akan dituliskan ke dalam file tersebut.
+
+            int main()
+            {
+                pid_t pid1, pid2, pid3;
+                char dari[] = "/home/gerry/Downloads/pets.zip";
+                char text[] = "/home/gerry/modul2/petshop";
+
+                chdir("/home/gerry/modul2/");
+
+                pid1 = fork();
+                if (pid1 == 0)
+                {
+                  //membuat folder petshop
+                    char *argc[]={"mkdir", "-p", text, NULL};
+                    execv("/usr/bin/mkdir",argc);
+                }
+                while(wait(NULL) != pid1);
+
+                pid2 = fork();
+                if(pid2 == 0)
+                {
+                  //unzip petshop.zip ke folder petshop
+                    char *arg[] = {"unzip", "-q", dari, "-d", text, NULL};
+                    execv("/usr/bin/unzip", arg);
+                }
+                while(wait(NULL) != pid2);
+
+                struct dirent *cek;
+                DIR *dir = opendir(text);
+
+                if(!dir)
+                {
+                    exit(EXIT_FAILURE);
+                }
+
+                chdir(text);
+
+                while (cek = readdir(dir))
+                {
+                    if(strcmp(cek->d_name, ".") != 0 && strcmp(cek->d_name, "..") != 0)
+                    {
+                        char *source = cek->d_name;
+                        char file[40];
+                        sprintf(file, "%s", source);
+
+                        DIR *dir2 = opendir(source);
+
+                        char hapus[40], asal[40];
+                        sprintf(hapus, "%s", source);
+                        sprintf(asal, "%s", source);
+
+                        if(dir2)
+                        {
+                            pid_t pid3;
+
+                            pid3 = fork();
+                            if(pid3 == 0)
+                            {
+                                //menghapus folder yang tidak dibutuhkan
+                                char *argv[] = {"rm", "-rf", hapus, NULL};
+                                execv("/usr/bin/rm", argv);
+                                exit(EXIT_SUCCESS);
+                            }
+                            while(wait(NULL) != pid3);
+                        }else
+                        {
+                            char *token, *nama_file[3];
+                            token = strtok(source, ";_");
+                            while(token != NULL){
+                                //memisah nama file menjadi jenis, nama, dan umur
+                                int i = 0;
+                                while(i<3)
+                                {
+                                    nama_file[i] = token;
+                                    token = strtok(NULL, ";_");
+                                    i++;
+                                }
+
+                                char *jenis = nama_file[0];
+                                char *nama = nama_file[1];
+                                char *umur = nama_file[2];
+
+                     //menghilangkan jpg pada umur
+                                char *jpg;
+                                jpg = strstr(umur, ".jpg");
+                                if(jpg != NULL)
+                                {
+                                    int counter = jpg - umur;
+                                    sprintf(umur, "%.*s", counter, umur);
+                                }
+
+                                folder(jenis);
+                                copy(jenis, asal, nama);
+                                keterangan(jenis, nama, umur);
+                            }
+                        }
+                        closedir(dir2);
+                    }
+                }
+            }
+
+* Di awal program main dideklarasikan dua buah variabel array `dari[]` yang menyimpan path direktori dari file zip yang belum diekstrak dan `text[]` yang akan menyimpan path direktori tujuan file zip akan diekstrak.
+* Selanjutnya direktori untuk menjalankan program akan diubah ke `/home/gerry/modul2/`. Kemudian dibuat folder baru dengan fungsi `argc[]={"mkdir", "-p", text, NULL}`
+* Dilanjutkan dengan proses unzip menggunakan fungsi `arg[] = {"unzip", "-q", dari, "-d", text, NULL};` 
+* Selanjutnya dibuat perulangan untuk menghapus folder-folder yang tidak diperlukan. Nama-nama folder ini akan diambil dengan `cek->d_name` ke dalam pointer **source**
+* Perintah penghapusan adalah dengan menggunakan `char *argv[] = {"rm", "-rf", hapus, NULL};` Array **hapus** sebelumnya sudah diisi dengan string dari **source**
+* Selanjutnya untuk memisahkan nama file menjadi nama, jenis, dan umur, digunakan fungsi `strtok`. Variabel **token** akan menyimpan string sebelum ';' dan string-string tersebut akan menjadi tiga nilai indeks, yaitu 0,1,2. 0 untuk jenis, 1 untuk nama, dan 2 untuk umur.
+* Selanjutnya untuk umur sendiri, karena umur diambil dari nama file dan merupakan indeks terakhir yang menyimpan string ".jpg", maka diperlukan penghapusan string ".jpg". Sebelum dihapus, terlebih dahulu digunakan fungsi `strstr` untuk menyimpan string ".jpg". Setelah itu menghilangkan string tersebut dengan pengurangan dari variabel **jpg** dan **umur**.
+* Setelah semua telah terselesaikan, dijalankanlah ketiga fungsi yang sudah dideklarasikan di atas yaitu fungsi **folder, copy, keterangan** dengan parameter yang sudah ditentukan.
 
 ### Kendala
 * Belum memahami fungsi **strtok** sehingga penyelesaian soal belum dituntaskan hingga deadline.
-* 
 
 ## Soal 3
 
