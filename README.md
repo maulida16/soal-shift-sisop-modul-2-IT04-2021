@@ -650,6 +650,11 @@ Karena pada soal 2 ini kami belum menuntaskan seluruh perintah soal, maka kami s
 ### Kendala
 * Belum memahami fungsi **strtok** sehingga penyelesaian soal belum dituntaskan hingga deadline.
 
+### Dokumentasi
+![1619363250094](https://user-images.githubusercontent.com/73152464/115998750-f0880400-a612-11eb-8169-a51db943bd46.jpg)
+![1619363281742](https://user-images.githubusercontent.com/73152464/115998773-0dbcd280-a613-11eb-8001-00eaacbd4ca1.jpg)
+![1619363319460](https://user-images.githubusercontent.com/73152464/115998786-19a89480-a613-11eb-9c45-f078e1d6ea43.jpg)
+
 ## Soal 3
 
 Ranora adalah mahasiswa Teknik Informatika yang saat ini sedang menjalani magang di perusahan ternama yang bernama “FakeKos Corp.”, perusahaan yang bergerak dibidang keamanan data. Karena Ranora masih magang, maka beban tugasnya tidak sebesar beban tugas pekerja tetap perusahaan. Di hari pertama Ranora bekerja, pembimbing magang Ranora memberi tugas pertamanya untuk membuat sebuah program.
